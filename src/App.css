@@ -1,5 +1,5 @@
 /* src/App.css */
-
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;700&display=swap');
 .App {
   /* Default Styles */
   text-align: center;
@@ -12,6 +12,10 @@
   border: 1px solid #ccc;
   border-radius: 5px;
   box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+body {
+  font-family: 'Roboto Mono', monospace;
 }
 
 /* ... rest of your CSS ... */
