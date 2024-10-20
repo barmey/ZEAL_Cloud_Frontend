@@ -16,6 +16,7 @@ import {
   Radio,
   RadioGroup,
   CircularProgress,
+  Link // Import Link from MUI
 } from '@mui/material';
 import { InsertDriveFileOutlined } from '@mui/icons-material';
 import VendorCard from './components/VendorCard'; // Import VendorCard component
@@ -39,6 +40,7 @@ const App = () => {
     vendor_classification: {},
     function_classification: {}
   }); // Initialize with correct structure
+  const [outputUrl, setOutputUrl] = useState(''); // State to store output_url
 
   // State for manual input fields
   const [manualInput, setManualInput] = useState({
@@ -97,6 +99,7 @@ const App = () => {
       vendor_classification: {},
       function_classification: {}
     }); // Clear previous JSON data
+    setOutputUrl(''); // Clear output URL
     console.log('Form submitted');
 
     // Basic validation
@@ -189,6 +192,8 @@ const App = () => {
 
         if (parsedBody.output_url) {
           console.log('output_url found:', parsedBody.output_url);
+          // Save the output_url
+          setOutputUrl(parsedBody.output_url);
           // Start polling with the provided output_url
           startPolling(parsedBody.output_url);
         } else {
@@ -305,6 +310,18 @@ const App = () => {
               <JustificationCard justification={jsonData.function_classification.justification} />
             )}
           </Box>
+        )}
+
+        {/* Display output_url elegantly */}
+        {outputUrl && (
+          <Alert severity="info" sx={{ mb: 2 }}>
+            <Typography variant="subtitle1">
+              Results are ready. You can view them here: 
+            </Typography>
+            <Link href={outputUrl} target="_blank" rel="noopener">
+              View Results
+            </Link>
+          </Alert>
         )}
 
         <Stack spacing={2}>
