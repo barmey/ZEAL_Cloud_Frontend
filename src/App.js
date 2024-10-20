@@ -16,12 +16,11 @@ import {
   Radio,
   RadioGroup,
   CircularProgress,
-  Link // Import Link from MUI
+  Link, // Import Link from MUI
 } from '@mui/material';
 import { InsertDriveFileOutlined } from '@mui/icons-material';
 import VendorCard from './components/VendorCard'; // Import VendorCard component
 import JustificationCard from './components/JustificationCard'; // Import JustificationCard
-import { getFunctionIcon } from './utils/iconMapping'; // Import helper function
 import { v4 as uuidv4 } from 'uuid'; // Import UUID for random name generation
 
 Amplify.configure(awsExports);
@@ -38,7 +37,7 @@ const App = () => {
   const [pollingMessage, setPollingMessage] = useState(''); // Message to display during polling
   const [jsonData, setJsonData] = useState({
     vendor_classification: {},
-    function_classification: {}
+    function_classification: {},
   }); // Initialize with correct structure
   const [outputUrl, setOutputUrl] = useState(''); // State to store output_url
 
@@ -85,7 +84,7 @@ const App = () => {
     }); // Reset manual input
     setJsonData({
       vendor_classification: {},
-      function_classification: {}
+      function_classification: {},
     }); // Reset JSON data
     setStatus(null); // Reset status
     console.log('Input method changed to:', e.target.value);
@@ -97,7 +96,7 @@ const App = () => {
     setPollingMessage(''); // Reset polling message
     setJsonData({
       vendor_classification: {},
-      function_classification: {}
+      function_classification: {},
     }); // Clear previous JSON data
     setOutputUrl(''); // Clear output URL
     console.log('Form submitted');
@@ -105,7 +104,7 @@ const App = () => {
     // Basic validation
     if (
       !formData.apiKey ||
-      (inputMethod === 'manual' && Object.values(manualInput).some(val => val === '')) ||
+      (inputMethod === 'manual' && Object.values(manualInput).some((val) => val === '')) ||
       (inputMethod === 'file' && !formData.jsonFile)
     ) {
       console.log('Validation failed: Missing required fields.');
@@ -145,19 +144,19 @@ const App = () => {
             mac_address: manualInput.mac_address,
             oui_vendor: manualInput.oui_vendor,
             'dhcp.option.hostname': manualInput['dhcp.option.hostname']
-              ? manualInput['dhcp.option.hostname'].split(',').map(item => item.trim())
+              ? manualInput['dhcp.option.hostname'].split(',').map((item) => item.trim())
               : [],
             'dns.qry.name': manualInput['dns.qry.name']
-              ? manualInput['dns.qry.name'].split(',').map(item => item.trim())
+              ? manualInput['dns.qry.name'].split(',').map((item) => item.trim())
               : [],
             'http.user_agent': manualInput['http.user_agent'],
             'dns.ptr.domain_name': manualInput['dns.ptr.domain_name']
-              ? manualInput['dns.ptr.domain_name'].split(',').map(item => item.trim())
+              ? manualInput['dns.ptr.domain_name'].split(',').map((item) => item.trim())
               : [],
             'dhcp.option.vendor_class_id': manualInput['dhcp.option.vendor_class_id']
-              ? manualInput['dhcp.option.vendor_class_id'].split(',').map(item => item.trim())
+              ? manualInput['dhcp.option.vendor_class_id'].split(',').map((item) => item.trim())
               : [],
-          }
+          },
         };
       }
 
@@ -316,7 +315,7 @@ const App = () => {
         {outputUrl && (
           <Alert severity="info" sx={{ mb: 2 }}>
             <Typography variant="subtitle1">
-              When the results are ready. You can view them here: 
+              Results are ready. You can view them here:{' '}
             </Typography>
             <Link href={outputUrl} target="_blank" rel="noopener">
               View Results
@@ -430,19 +429,39 @@ const App = () => {
           )}
 
           {inputMethod === 'file' && (
-            <Button
-              variant="contained"
-              component="label"
-              startIcon={<InsertDriveFileOutlined />}
-            >
-              Upload JSON File
-              <input
-                type="file"
-                accept=".json"
-                onChange={handleFileChange}
-                hidden
-              />
-            </Button>
+            <>
+              <Button
+                variant="contained"
+                component="label"
+                startIcon={<InsertDriveFileOutlined />}
+              >
+                Upload JSON File
+                <input
+                  type="file"
+                  accept=".json"
+                  onChange={handleFileChange}
+                  hidden
+                />
+              </Button>
+
+              {/* JSON format description */}
+              <Typography variant="body2" color="textSecondary" sx={{ mt: 2 }}>
+                <strong>JSON Format Example:</strong>
+                <pre style={{ backgroundColor: '#f5f5f5', padding: '10px', borderRadius: '4px' }}>
+                  {'{\n'}
+                  {'  "random_key": {\n'}
+                  {'    "mac_address": "xx:xx:xx:xx:xx:xx",\n'}
+                  {'    "oui_vendor": "VendorName",\n'}
+                  {'    "dhcp.option.hostname": ["hostname1", "hostname2"],\n'}
+                  {'    "dns.qry.name": ["example.com"],\n'}
+                  {'    "http.user_agent": "UserAgentString",\n'}
+                  {'    "dns.ptr.domain_name": ["ptr.example.com"],\n'}
+                  {'    "dhcp.option.vendor_class_id": ["class_id"]\n'}
+                  {'  }\n'}
+                  {'}'}
+                </pre>
+              </Typography>
+            </>
           )}
 
           <Button
