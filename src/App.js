@@ -315,7 +315,7 @@ const App = () => {
         {outputUrl && (
           <Alert severity="info" sx={{ mb: 2 }}>
             <Typography variant="subtitle1">
-              Results are ready. You can view them here:{' '}
+              When results are ready. You can view them here:{' '}
             </Typography>
             <Link href={outputUrl} target="_blank" rel="noopener">
               View Results
