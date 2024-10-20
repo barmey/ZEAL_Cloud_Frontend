@@ -449,7 +449,7 @@ const App = () => {
                 <strong>JSON Format Example:</strong>
                 <pre style={{ backgroundColor: '#f5f5f5', padding: '10px', borderRadius: '4px' }}>
                   {'{\n'}
-                  {'  "random_key": {\n'}
+                  {'  "device id": {\n'}
                   {'    "mac_address": "xx:xx:xx:xx:xx:xx",\n'}
                   {'    "oui_vendor": "VendorName",\n'}
                   {'    "dhcp.option.hostname": ["hostname1", "hostname2"],\n'}
