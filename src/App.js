@@ -394,8 +394,66 @@ const App = () => {
           {inputMethod === 'inference_api' && (
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               <Typography variant="subtitle1">Device Information:</Typography>
-              {/* [Manual input fields here, same as before] */}
-              {/* ... */}
+              <TextField
+                label="MAC Address"
+                name="mac_address"
+                value={manualInput.mac_address}
+                onChange={handleManualInputChange}
+                helperText="Example: AA:BB:CC:DD:EE:FF"
+                fullWidth
+                variant="outlined"
+                color="primary"
+              />
+              <TextField
+                label="DHCP Hostname (comma-separated)"
+                name="dhcp.option.hostname"
+                value={manualInput['dhcp.option.hostname']}
+                onChange={handleManualInputChange}
+                helperText="Example: host1, host2"
+                fullWidth
+                variant="outlined"
+                color="primary"
+              />
+              <TextField
+                label="Domains (comma-separated)"
+                name="dns.qry.name"
+                value={manualInput['dns.qry.name']}
+                onChange={handleManualInputChange}
+                helperText="Example: example.com, test.com"
+                fullWidth
+                variant="outlined"
+                color="primary"
+              />
+              <TextField
+                label="HTTP User Agent"
+                name="http.user_agent"
+                value={manualInput['http.user_agent']}
+                onChange={handleManualInputChange}
+                helperText="Example: Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+                fullWidth
+                variant="outlined"
+                color="primary"
+              />
+              <TextField
+                label="DNS PTR (comma-separated)"
+                name="dns.ptr.domain_name"
+                value={manualInput['dns.ptr.domain_name']}
+                onChange={handleManualInputChange}
+                helperText="Example: ptr.example.com"
+                fullWidth
+                variant="outlined"
+                color="primary"
+              />
+              <TextField
+                label="Vendor Class ID (comma-separated)"
+                name="dhcp.option.vendor_class_id"
+                value={manualInput['dhcp.option.vendor_class_id']}
+                onChange={handleManualInputChange}
+                helperText="Example: MSFT 5.0, MSFT 5.1"
+                fullWidth
+                variant="outlined"
+                color="primary"
+              />
             </Box>
           )}
 
@@ -450,8 +508,59 @@ const App = () => {
 
           {inputMethod === 'api_usage' && (
             <Box sx={{ mt: 2 }}>
-              {/* [API Usage Instructions here, same as before] */}
-              {/* ... */}
+              <Typography variant="h6" gutterBottom>
+                API Usage Instructions
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                You can use the API directly by making HTTP POST requests to the
+                following endpoint:
+              </Typography>
+              <Typography variant="body2" sx={{ mb: 2 }}>
+                <code>
+                  https://qxzcncmpw4.execute-api.eu-west-2.amazonaws.com/bar_test_stage/classify
+                </code>
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                Below is a Python code example using the <code>requests</code>{' '}
+                library:
+              </Typography>
+              <pre
+                style={{
+                  backgroundColor: '#f5f5f5',
+                  padding: '10px',
+                  borderRadius: '4px',
+                  overflowX: 'auto',
+                }}
+              >
+                {`import requests
+import json
+
+url = "https://qxzcncmpw4.execute-api.eu-west-2.amazonaws.com/bar_test_stage/classify"
+api_key = "YOUR_API_KEY"
+
+headers = {
+    "Content-Type": "application/json",
+    "x-api-key": api_key
+}
+
+data = {
+    "device id": {
+        "mac_address": "xx:xx:xx:xx:xx:xx",
+        "dhcp.option.hostname": ["hostname1", "hostname2"],
+        "dns.qry.name": ["example.com"],
+        "http.user_agent": "UserAgentString",
+        "dns.ptr.domain_name": ["ptr.example.com"],
+        "dhcp.option.vendor_class_id": ["class_id"]
+    }
+}
+
+response = requests.post(url, headers=headers, data=json.dumps(data))
+
+if response.ok:
+    print("Response:", response.json())
+else:
+    print("Error:", response.text)`}
+              </pre>
             </Box>
           )}
 
