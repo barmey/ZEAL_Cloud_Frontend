@@ -532,7 +532,7 @@ const App = () => {
                   overflowX: 'auto',
                 }}
               >
-                {`import requests
+{`import requests
 import json
 
 url = "https://qxzcncmpw4.execute-api.eu-west-2.amazonaws.com/bar_test_stage/classify"
@@ -578,6 +578,60 @@ else:
           )}
         </Stack>
       </Card>
+
+      {/* Add new sections below the form */}
+      <Box sx={{ maxWidth: 800, width: '100%', mt: 4 }}>
+        <Typography variant="h6" gutterBottom>
+          About Us
+        </Typography>
+        <Typography variant="body1" gutterBottom>
+          We are a research group called <strong>Deepness Lab</strong> at Tel Aviv University.
+          You can reach out to us at{' '}
+          <Link href="mailto:deepnesslab@tauex.tau.ac.il">deepnesslab@tauex.tau.ac.il</Link>{' '}
+          to get access (API key) to the system. For more information, visit our website:{' '}
+          <Link href="https://deepness-lab.org/publications/" target="_blank" rel="noopener">
+            https://deepness-lab.org/publications/
+          </Link>
+        </Typography>
+
+        <Typography variant="h6" gutterBottom sx={{ mt: 4 }}>
+          Academic Use
+        </Typography>
+        <Typography variant="body1" gutterBottom>
+          Any use of the system for academic research is encouraged. We kindly ask you to cite our
+          paper:
+        </Typography>
+        <pre
+          style={{
+            backgroundColor: '#f5f5f5',
+            padding: '10px',
+            borderRadius: '4px',
+            overflowX: 'auto',
+          }}
+        >
+{`@misc{Bremler-Barr2024b,
+  author = {Anat Bremler-Barr and Bar Meyuhas and Tal Shapira},
+  title = {IoT Device Labeling Using Large Language Models},
+  year = {2024},
+  url = {https://deepness-lab.org/publications/iot-device-labeling-using-large-language-models/},
+}`}
+        </pre>
+      </Box>
+
+      {/* Footer with copyright */}
+      <Box
+        sx={{
+          mt: 4,
+          py: 2,
+          width: '100%',
+          backgroundColor: 'background.paper',
+          textAlign: 'center',
+        }}
+      >
+        <Typography variant="body2" color="textSecondary">
+          © {new Date().getFullYear()} Bar Meyuhas, Anat Bremler Barr, and Tal Shapira
+        </Typography>
+      </Box>
     </Box>
   );
 };
