@@ -272,7 +272,7 @@ const App = () => {
     >
       <Card sx={{ p: 4, maxWidth: 800, width: '100%', borderRadius: 2, boxShadow: 3 }}>
         <Typography variant="h5" gutterBottom color="primary">
-          NoT Device Classifier
+          IoT Device Classifier
         </Typography>
 
         {status === 'success' && jsonData.vendor_classification.label && !jsonData.function_classification.label && (
