@@ -394,14 +394,15 @@ const App = () => {
                 variant="outlined"
                 color="primary"
                 InputProps={{
-                  startAdornment: (
-                    <VpnKeyIcon color="action" sx={{ mr: 1 }} />
-                  ),
+                  startAdornment: <VpnKeyIcon color="action" sx={{ mr: 1 }} />,
                 }}
               />
 
               <FormControl component="fieldset">
-                <Typography variant="subtitle1" sx={{ display: 'flex', alignItems: 'center' }}>
+                <Typography
+                  variant="subtitle1"
+                  sx={{ display: 'flex', alignItems: 'center' }}
+                >
                   <InputIcon sx={{ mr: 1 }} /> Choose Input Method:
                 </Typography>
                 <RadioGroup
@@ -436,46 +437,118 @@ const App = () => {
                     <DeviceHubIcon sx={{ mr: 1 }} />
                     Device Information:
                   </Typography>
-                  {/* Manual input fields with icons */}
-                  {[
-                    { label: 'MAC Address', name: 'mac_address', icon: <InputIcon /> },
-                    { label: 'DHCP Hostname (comma-separated)', name: 'dhcp.option.hostname', icon: <InputIcon /> },
-                    { label: 'Domains (comma-separated)', name: 'dns.qry.name', icon: <InputIcon /> },
-                    { label: 'HTTP User Agent', name: 'http.user_agent', icon: <InputIcon /> },
-                    { label: 'DNS PTR (comma-separated)', name: 'dns.ptr.domain_name', icon: <InputIcon /> },
-                    { label: 'Vendor Class ID (comma-separated)', name: 'dhcp.option.vendor_class_id', icon: <InputIcon /> },
-                  ].map((field) => (
-                    <TextField
-                      key={field.name}
-                      label={field.label}
-                      name={field.name}
-                      value={manualInput[field.name]}
-                      onChange={handleManualInputChange}
-                      helperText={`Example: ${
-                        field.name === 'mac_address'
-                          ? 'AA:BB:CC:DD:EE:FF'
-                          : field.label.includes('comma-separated')
-                          ? 'value1, value2'
-                          : 'Enter the value'
-                      }`}
-                      fullWidth
-                      variant="outlined"
-                      color="primary"
-                      InputProps={{
-                        startAdornment: (
-                          <IconButton edge="start" disabled>
-                            {field.icon}
-                          </IconButton>
-                        ),
-                      }}
-                    />
-                  ))}
+                  {/* Manual input fields with specific helperText */}
+                  <TextField
+                    label="MAC Address"
+                    name="mac_address"
+                    value={manualInput['mac_address']}
+                    onChange={handleManualInputChange}
+                    helperText="Example: AA:BB:CC:DD:EE:FF"
+                    fullWidth
+                    variant="outlined"
+                    color="primary"
+                    InputProps={{
+                      startAdornment: (
+                        <IconButton edge="start" disabled>
+                          <InputIcon />
+                        </IconButton>
+                      ),
+                    }}
+                  />
+                  <TextField
+                    label="DHCP Hostname (comma-separated)"
+                    name="dhcp.option.hostname"
+                    value={manualInput['dhcp.option.hostname']}
+                    onChange={handleManualInputChange}
+                    helperText="Example: host1, host2"
+                    fullWidth
+                    variant="outlined"
+                    color="primary"
+                    InputProps={{
+                      startAdornment: (
+                        <IconButton edge="start" disabled>
+                          <InputIcon />
+                        </IconButton>
+                      ),
+                    }}
+                  />
+                  <TextField
+                    label="Domains (comma-separated)"
+                    name="dns.qry.name"
+                    value={manualInput['dns.qry.name']}
+                    onChange={handleManualInputChange}
+                    helperText="Example: example.com, test.com"
+                    fullWidth
+                    variant="outlined"
+                    color="primary"
+                    InputProps={{
+                      startAdornment: (
+                        <IconButton edge="start" disabled>
+                          <InputIcon />
+                        </IconButton>
+                      ),
+                    }}
+                  />
+                  <TextField
+                    label="HTTP User Agent"
+                    name="http.user_agent"
+                    value={manualInput['http.user_agent']}
+                    onChange={handleManualInputChange}
+                    helperText="Example: Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+                    fullWidth
+                    variant="outlined"
+                    color="primary"
+                    InputProps={{
+                      startAdornment: (
+                        <IconButton edge="start" disabled>
+                          <InputIcon />
+                        </IconButton>
+                      ),
+                    }}
+                  />
+                  <TextField
+                    label="DNS PTR (comma-separated)"
+                    name="dns.ptr.domain_name"
+                    value={manualInput['dns.ptr.domain_name']}
+                    onChange={handleManualInputChange}
+                    helperText="Example: ptr.example.com"
+                    fullWidth
+                    variant="outlined"
+                    color="primary"
+                    InputProps={{
+                      startAdornment: (
+                        <IconButton edge="start" disabled>
+                          <InputIcon />
+                        </IconButton>
+                      ),
+                    }}
+                  />
+                  <TextField
+                    label="Vendor Class ID (comma-separated)"
+                    name="dhcp.option.vendor_class_id"
+                    value={manualInput['dhcp.option.vendor_class_id']}
+                    onChange={handleManualInputChange}
+                    helperText="Example: MSFT 5.0, MSFT 5.1"
+                    fullWidth
+                    variant="outlined"
+                    color="primary"
+                    InputProps={{
+                      startAdornment: (
+                        <IconButton edge="start" disabled>
+                          <InputIcon />
+                        </IconButton>
+                      ),
+                    }}
+                  />
                 </Box>
               )}
 
               {inputMethod === 'inference_json' && (
                 <>
-                  <Typography variant="subtitle1" sx={{ display: 'flex', alignItems: 'center' }}>
+                  <Typography
+                    variant="subtitle1"
+                    sx={{ display: 'flex', alignItems: 'center' }}
+                  >
                     <InputIcon sx={{ mr: 1 }} />
                     Paste JSON Here:
                   </Typography>
@@ -489,7 +562,7 @@ const App = () => {
                       marginBottom: '16px',
                     }}
                   >
-{`{
+                    {`{
   "device id": {
     "mac_address": "xx:xx:xx:xx:xx:xx",
     "dhcp.option.hostname": ["hostname1", "hostname2"],
@@ -551,7 +624,7 @@ const App = () => {
                       overflowX: 'auto',
                     }}
                   >
-{`import requests
+                    {`import requests
 import json
 
 url = "https://qxzcncmpw4.execute-api.eu-west-2.amazonaws.com/bar_test_stage/classify"
@@ -663,7 +736,7 @@ else:
                 overflowX: 'auto',
               }}
             >
-{`@misc{Bremler-Barr2024b,
+              {`@misc{Bremler-Barr2024b,
   author = {Anat Bremler-Barr and Bar Meyuhas and Tal Shapira},
   title = {IoT Device Labeling Using Large Language Models},
   year = {2024},
@@ -689,7 +762,7 @@ else:
             <Box sx={{ mt: 1 }}>
               <IconButton
                 component="a"
-                href="https://github.com/barmey/"
+                href="https://github.com/your-profile"
                 target="_blank"
                 rel="noopener"
               >
