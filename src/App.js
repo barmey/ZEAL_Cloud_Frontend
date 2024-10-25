@@ -192,7 +192,7 @@ const App = () => {
       console.log('Request Body:', JSON.stringify(requestBody, null, 2));
 
       const response = await fetch(
-        'https://qxzcncmpw4.execute-api.eu-west-2.amazonaws.com/test2/classify',
+        'https://qxzcncmpw4.execute-api.eu-west-2.amazonaws.com/bar_test_stage/classify',
         {
           method: 'POST',
           headers: headers,
