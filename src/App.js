@@ -585,10 +585,14 @@ else:
           About Us
         </Typography>
         <Typography variant="body1" gutterBottom>
-          We are a research group called <strong>Deepness Lab</strong> at Tel Aviv University.
-          You can reach out to us at{' '}
+          We at the research group <strong>Deepness Lab</strong> developed a Labeling system for unseen IoT Devices.
+        We aim to provide visibility to the devices connceted to your networks and reveal both:
+        vendor (e.g., nest, ring, etc.) and function (e.g., speaker, camera, vacuum cleaner, etc.).
+           We address the challenge of type labeling of an unseen IoT device. 
+             We introduce a novel IoT labeling system, Zero-shot Engine for IoT Asset Labeling (ZEAL)..
+          To use this cloud based system, you can reach out to us at{' '}
           <Link href="mailto:deepnesslab@tauex.tau.ac.il">deepnesslab@tauex.tau.ac.il</Link>{' '}
-          to get access (API key) to the system. For more information, visit our website:{' '}
+          to get access (API key) to the system. For more information and researches, visit our website:{' '}
           <Link href="https://deepness-lab.org/publications/" target="_blank" rel="noopener">
             https://deepness-lab.org/publications/
           </Link>
