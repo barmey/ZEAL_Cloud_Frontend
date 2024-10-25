@@ -16,12 +16,12 @@ import {
   Radio,
   RadioGroup,
   CircularProgress,
-  Link, // Import Link from MUI
+  Link,
 } from '@mui/material';
 import { InsertDriveFileOutlined } from '@mui/icons-material';
-import VendorCard from './components/VendorCard'; // Import VendorCard component
-import JustificationCard from './components/JustificationCard'; // Import JustificationCard
-import { v4 as uuidv4 } from 'uuid'; // Import UUID for random name generation
+import VendorCard from './components/VendorCard';
+import JustificationCard from './components/JustificationCard';
+import { v4 as uuidv4 } from 'uuid';
 
 Amplify.configure(awsExports);
 
@@ -104,7 +104,6 @@ const App = () => {
     // Basic validation
     if (
       !formData.apiKey ||
-      (inputMethod === 'manual' && Object.values(manualInput).some((val) => val === '')) ||
       (inputMethod === 'file' && !formData.jsonFile)
     ) {
       console.log('Validation failed: Missing required fields.');
@@ -138,25 +137,47 @@ const App = () => {
         // Generate a random key name
         const randomName = uuidv4();
 
-        // Construct the JSON object
+        // Construct the JSON object dynamically
+        const deviceData = {};
+
+        if (manualInput.mac_address) {
+          deviceData.mac_address = manualInput.mac_address;
+        }
+        if (manualInput.oui_vendor) {
+          deviceData.oui_vendor = manualInput.oui_vendor;
+        }
+        if (manualInput['http.user_agent']) {
+          deviceData['http.user_agent'] = manualInput['http.user_agent'];
+        }
+        if (manualInput['dhcp.option.hostname']) {
+          deviceData['dhcp.option.hostname'] = manualInput['dhcp.option.hostname']
+            .split(',')
+            .map((item) => item.trim());
+        }
+        if (manualInput['dns.qry.name']) {
+          deviceData['dns.qry.name'] = manualInput['dns.qry.name']
+            .split(',')
+            .map((item) => item.trim());
+        }
+        if (manualInput['dns.ptr.domain_name']) {
+          deviceData['dns.ptr.domain_name'] = manualInput['dns.ptr.domain_name']
+            .split(',')
+            .map((item) => item.trim());
+        }
+        if (manualInput['dhcp.option.vendor_class_id']) {
+          deviceData['dhcp.option.vendor_class_id'] = manualInput['dhcp.option.vendor_class_id']
+            .split(',')
+            .map((item) => item.trim());
+        }
+
+        if (Object.keys(deviceData).length === 0) {
+          console.log('Validation failed: No data provided in manual input.');
+          setStatus('error');
+          return;
+        }
+
         requestBody = {
-          [randomName]: {
-            mac_address: manualInput.mac_address,
-            oui_vendor: manualInput.oui_vendor,
-            'dhcp.option.hostname': manualInput['dhcp.option.hostname']
-              ? manualInput['dhcp.option.hostname'].split(',').map((item) => item.trim())
-              : [],
-            'dns.qry.name': manualInput['dns.qry.name']
-              ? manualInput['dns.qry.name'].split(',').map((item) => item.trim())
-              : [],
-            'http.user_agent': manualInput['http.user_agent'],
-            'dns.ptr.domain_name': manualInput['dns.ptr.domain_name']
-              ? manualInput['dns.ptr.domain_name'].split(',').map((item) => item.trim())
-              : [],
-            'dhcp.option.vendor_class_id': manualInput['dhcp.option.vendor_class_id']
-              ? manualInput['dhcp.option.vendor_class_id'].split(',').map((item) => item.trim())
-              : [],
-          },
+          [randomName]: deviceData,
         };
       }
 
@@ -315,7 +336,7 @@ const App = () => {
         {outputUrl && (
           <Alert severity="info" sx={{ mb: 2 }}>
             <Typography variant="subtitle1">
-              When results are ready. You can view them here:{' '}
+              When results are ready, you can view them here:{' '}
             </Typography>
             <Link href={outputUrl} target="_blank" rel="noopener">
               View Results
@@ -360,7 +381,6 @@ const App = () => {
                 name="mac_address"
                 value={manualInput.mac_address}
                 onChange={handleManualInputChange}
-                required
                 fullWidth
                 variant="outlined"
                 color="primary"
@@ -370,7 +390,6 @@ const App = () => {
                 name="oui_vendor"
                 value={manualInput.oui_vendor}
                 onChange={handleManualInputChange}
-                required
                 fullWidth
                 variant="outlined"
                 color="primary"
@@ -380,7 +399,6 @@ const App = () => {
                 name="dhcp.option.hostname"
                 value={manualInput['dhcp.option.hostname']}
                 onChange={handleManualInputChange}
-                required
                 fullWidth
                 variant="outlined"
                 color="primary"
@@ -390,7 +408,6 @@ const App = () => {
                 name="dns.qry.name"
                 value={manualInput['dns.qry.name']}
                 onChange={handleManualInputChange}
-                required
                 fullWidth
                 variant="outlined"
                 color="primary"
@@ -400,7 +417,6 @@ const App = () => {
                 name="http.user_agent"
                 value={manualInput['http.user_agent']}
                 onChange={handleManualInputChange}
-                required
                 fullWidth
                 variant="outlined"
                 color="primary"
@@ -410,7 +426,6 @@ const App = () => {
                 name="dns.ptr.domain_name"
                 value={manualInput['dns.ptr.domain_name']}
                 onChange={handleManualInputChange}
-                required
                 fullWidth
                 variant="outlined"
                 color="primary"
@@ -420,7 +435,6 @@ const App = () => {
                 name="dhcp.option.vendor_class_id"
                 value={manualInput['dhcp.option.vendor_class_id']}
                 onChange={handleManualInputChange}
-                required
                 fullWidth
                 variant="outlined"
                 color="primary"
