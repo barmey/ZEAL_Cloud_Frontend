@@ -399,29 +399,26 @@ const App = () => {
                 name="mac_address"
                 value={manualInput.mac_address}
                 onChange={handleManualInputChange}
-                placeholder="e.g., AA:BB:CC:DD:EE:FF"
                 helperText="Example: AA:BB:CC:DD:EE:FF"
                 fullWidth
                 variant="outlined"
                 color="primary"
               />
               <TextField
-                label="DHCP Option Hostname (comma-separated)"
+                label="DHCP Hostname (comma-separated)"
                 name="dhcp.option.hostname"
                 value={manualInput['dhcp.option.hostname']}
                 onChange={handleManualInputChange}
-                placeholder="e.g., host1, host2"
                 helperText="Example: host1, host2"
                 fullWidth
                 variant="outlined"
                 color="primary"
               />
               <TextField
-                label="DNS Query Name (comma-separated)"
+                label="Domains (comma-separated)"
                 name="dns.qry.name"
                 value={manualInput['dns.qry.name']}
                 onChange={handleManualInputChange}
-                placeholder="e.g., example.com, test.com"
                 helperText="Example: example.com, test.com"
                 fullWidth
                 variant="outlined"
@@ -432,29 +429,26 @@ const App = () => {
                 name="http.user_agent"
                 value={manualInput['http.user_agent']}
                 onChange={handleManualInputChange}
-                placeholder="e.g., Mozilla/5.0..."
                 helperText="Example: Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
                 fullWidth
                 variant="outlined"
                 color="primary"
               />
               <TextField
-                label="DNS PTR Domain Name (comma-separated)"
+                label="DNS PTR (comma-separated)"
                 name="dns.ptr.domain_name"
                 value={manualInput['dns.ptr.domain_name']}
                 onChange={handleManualInputChange}
-                placeholder="e.g., ptr.example.com"
                 helperText="Example: ptr.example.com"
                 fullWidth
                 variant="outlined"
                 color="primary"
               />
               <TextField
-                label="DHCP Option Vendor Class ID (comma-separated)"
+                label="Vendor Class ID (comma-separated)"
                 name="dhcp.option.vendor_class_id"
                 value={manualInput['dhcp.option.vendor_class_id']}
                 onChange={handleManualInputChange}
-                placeholder="e.g., class_id1, class_id2"
                 helperText="Example: MSFT 5.0, MSFT 5.1"
                 fullWidth
                 variant="outlined"
@@ -465,17 +459,18 @@ const App = () => {
 
           {inputMethod === 'inference_json' && (
             <>
-              <TextField
-                label="Paste JSON Here"
-                name="jsonInput"
-                value={formData.jsonInput}
-                onChange={handleJsonInputChange}
-                multiline
-                rows={10}
-                fullWidth
-                variant="outlined"
-                color="primary"
-                placeholder={`{
+              <Typography variant="subtitle1">Paste JSON Here:</Typography>
+              {/* Display the JSON example */}
+              <pre
+                style={{
+                  backgroundColor: '#f5f5f5',
+                  padding: '10px',
+                  borderRadius: '4px',
+                  overflowX: 'auto',
+                  marginBottom: '16px',
+                }}
+              >
+                {`{
   "device id": {
     "mac_address": "xx:xx:xx:xx:xx:xx",
     "dhcp.option.hostname": ["hostname1", "hostname2"],
@@ -485,17 +480,17 @@ const App = () => {
     "dhcp.option.vendor_class_id": ["class_id"]
   }
 }`}
-                helperText="Example JSON structure is shown in the placeholder."
+              </pre>
+              <TextField
+                name="jsonInput"
+                value={formData.jsonInput}
+                onChange={handleJsonInputChange}
+                multiline
+                rows={10}
+                fullWidth
+                variant="outlined"
+                color="primary"
               />
-
-              {/* JSON format description */}
-              <Typography
-                variant="body2"
-                color="textSecondary"
-                sx={{ mt: 2 }}
-              >
-                <strong>JSON Format Example:</strong>
-              </Typography>
             </>
           )}
 
