@@ -234,17 +234,12 @@ const App = () => {
   };
 
   const startPolling = (url) => {
-    const maxAttempts = 15; // For up to 15 minutes with 1-minute intervals
-    let attempt = 0;
-
     setIsPolling(true); // Start polling
-    setPollingMessage('Polling for results...');
+    setPollingMessage('Waiting for classification process to end');
     console.log('Polling started with URL:', url);
 
     const pollData = async () => {
-      attempt++;
-      setPollingMessage(`Polling attempt ${attempt} of ${maxAttempts}...`);
-      console.log(`Polling attempt ${attempt} for URL: ${url}`);
+      console.log(`Polling for URL: ${url}`);
 
       try {
         const linkResponse = await fetch(url);
@@ -257,20 +252,14 @@ const App = () => {
           setStatus('success');
           setIsPolling(false); // Stop polling
           setPollingMessage('Results fetched successfully!');
-        } else if (attempt < maxAttempts) {
-          console.warn(`Attempt ${attempt} failed with status ${linkResponse.status}. Retrying in 1 minute.`);
-          setTimeout(pollData, 60000); // Retry after 1 minute
         } else {
-          console.error(`Failed to fetch data after ${maxAttempts} attempts. Status: ${linkResponse.status}`);
-          setStatus('error');
-          setIsPolling(false); // Stop polling
-          setPollingMessage('Failed to fetch results after multiple attempts.');
+          console.warn(`Polling attempt failed with status ${linkResponse.status}. Retrying in 5 seconds.`);
+          setTimeout(pollData, 5000); // Retry after 5 seconds
         }
       } catch (error) {
         console.error('Error during polling:', error);
-        setStatus('error');
-        setIsPolling(false); // Stop polling
-        setPollingMessage('An error occurred during polling.');
+        console.warn('Retrying in 5 seconds.');
+        setTimeout(pollData, 5000); // Retry after 5 seconds
       }
     };
 
@@ -293,7 +282,7 @@ const App = () => {
     >
       <Card sx={{ p: 4, maxWidth: 800, width: '100%', borderRadius: 2, boxShadow: 3 }}>
         <Typography variant="h5" gutterBottom color="primary">
-          IoT Device Classifier
+          NoT Device Classifier
         </Typography>
 
         {status === 'success' && jsonData.vendor_classification.label && !jsonData.function_classification.label && (
