@@ -18,7 +18,6 @@ import {
   CircularProgress,
   Link,
 } from '@mui/material';
-import { InsertDriveFileOutlined } from '@mui/icons-material';
 import VendorCard from './components/VendorCard';
 import JustificationCard from './components/JustificationCard';
 import { v4 as uuidv4 } from 'uuid';
@@ -29,10 +28,10 @@ const App = () => {
   // Form state
   const [formData, setFormData] = useState({
     apiKey: '',
-    jsonFile: null,
+    jsonInput: '',
   });
   const [status, setStatus] = useState(null); // null, 'success', 'error'
-  const [inputMethod, setInputMethod] = useState('manual'); // 'manual' or 'file'
+  const [inputMethod, setInputMethod] = useState('inference_api'); // 'inference_api', 'inference_json', 'api_usage'
   const [isPolling, setIsPolling] = useState(false); // Indicates if polling is in progress
   const [pollingMessage, setPollingMessage] = useState(''); // Message to display during polling
   const [jsonData, setJsonData] = useState({
@@ -44,7 +43,6 @@ const App = () => {
   // State for manual input fields
   const [manualInput, setManualInput] = useState({
     mac_address: '',
-    oui_vendor: '',
     'dhcp.option.hostname': '',
     'dns.qry.name': '',
     'http.user_agent': '',
@@ -62,20 +60,15 @@ const App = () => {
     setManualInput({ ...manualInput, [name]: value });
   };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setFormData({ ...formData, jsonFile: file });
-      console.log('File selected:', file.name);
-    }
+  const handleJsonInputChange = (e) => {
+    setFormData({ ...formData, jsonInput: e.target.value });
   };
 
   const handleInputMethodChange = (e) => {
     setInputMethod(e.target.value);
-    setFormData({ ...formData, jsonFile: null }); // Reset JSON file
+    setFormData({ ...formData, jsonInput: '' }); // Reset JSON input
     setManualInput({
       mac_address: '',
-      oui_vendor: '',
       'dhcp.option.hostname': '',
       'dns.qry.name': '',
       'http.user_agent': '',
@@ -87,6 +80,8 @@ const App = () => {
       function_classification: {},
     }); // Reset JSON data
     setStatus(null); // Reset status
+    setPollingMessage(''); // Reset polling message
+    setOutputUrl(''); // Reset output URL
     console.log('Input method changed to:', e.target.value);
   };
 
@@ -102,11 +97,8 @@ const App = () => {
     console.log('Form submitted');
 
     // Basic validation
-    if (
-      !formData.apiKey ||
-      (inputMethod === 'file' && !formData.jsonFile)
-    ) {
-      console.log('Validation failed: Missing required fields.');
+    if (!formData.apiKey) {
+      console.log('Validation failed: Missing API key.');
       setStatus('error');
       return;
     }
@@ -114,38 +106,34 @@ const App = () => {
     try {
       let requestBody = {};
 
-      if (inputMethod === 'file') {
-        const fileContent = await new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            console.log('File read successfully');
-            try {
-              const parsed = JSON.parse(e.target.result);
-              resolve(parsed);
-            } catch (err) {
-              reject(err);
-            }
-          };
-          reader.onerror = (e) => {
-            console.error('File read error:', e);
-            reject(e);
-          };
-          reader.readAsText(formData.jsonFile);
-        });
-        requestBody = fileContent;
-      } else {
+      if (inputMethod === 'inference_json') {
+        if (!formData.jsonInput) {
+          console.log('Validation failed: JSON input is empty.');
+          setStatus('error');
+          return;
+        }
+        try {
+          const parsed = JSON.parse(formData.jsonInput);
+          requestBody = parsed;
+        } catch (err) {
+          console.error('JSON parse error:', err);
+          setStatus('error');
+          return;
+        }
+      } else if (inputMethod === 'inference_api') {
         // Generate a random key name
         const randomName = uuidv4();
 
         // Construct the JSON object dynamically
         const deviceData = {};
 
+        // Always set mac_address, use fake MAC if empty
         if (manualInput.mac_address) {
           deviceData.mac_address = manualInput.mac_address;
+        } else {
+          deviceData.mac_address = 'FF:FF:FF:FF:FF:FF';
         }
-        if (manualInput.oui_vendor) {
-          deviceData.oui_vendor = manualInput.oui_vendor;
-        }
+
         if (manualInput['http.user_agent']) {
           deviceData['http.user_agent'] = manualInput['http.user_agent'];
         }
@@ -165,13 +153,22 @@ const App = () => {
             .map((item) => item.trim());
         }
         if (manualInput['dhcp.option.vendor_class_id']) {
-          deviceData['dhcp.option.vendor_class_id'] = manualInput['dhcp.option.vendor_class_id']
+          deviceData['dhcp.option.vendor_class_id'] = manualInput[
+            'dhcp.option.vendor_class_id'
+          ]
             .split(',')
             .map((item) => item.trim());
         }
 
-        if (Object.keys(deviceData).length === 0) {
-          console.log('Validation failed: No data provided in manual input.');
+        // Check if any fields other than mac_address are provided
+        const fieldsProvided = Object.keys(deviceData).filter(
+          (key) => key !== 'mac_address' && deviceData[key] !== undefined
+        );
+
+        if (fieldsProvided.length === 0) {
+          console.log(
+            'Validation failed: No data provided in manual input besides MAC address.'
+          );
           setStatus('error');
           return;
         }
@@ -179,6 +176,9 @@ const App = () => {
         requestBody = {
           [randomName]: deviceData,
         };
+      } else {
+        // For 'api_usage', no submission is needed
+        return;
       }
 
       // Construct authorization header as needed
@@ -217,7 +217,9 @@ const App = () => {
           // Start polling with the provided output_url
           startPolling(parsedBody.output_url);
         } else {
-          console.log('No output_url found in API response. Setting status to success.');
+          console.log(
+            'No output_url found in API response. Setting status to success.'
+          );
           setStatus('success');
           setPollingMessage('Request processed, but no output URL was provided.');
         }
@@ -253,7 +255,9 @@ const App = () => {
           setIsPolling(false); // Stop polling
           setPollingMessage('Results fetched successfully!');
         } else {
-          console.warn(`Polling attempt failed with status ${linkResponse.status}. Retrying in 5 seconds.`);
+          console.warn(
+            `Polling attempt failed with status ${linkResponse.status}. Retrying in 5 seconds.`
+          );
           setTimeout(pollData, 5000); // Retry after 5 seconds
         }
       } catch (error) {
@@ -280,46 +284,62 @@ const App = () => {
         minHeight: '100vh',
       }}
     >
-      <Card sx={{ p: 4, maxWidth: 800, width: '100%', borderRadius: 2, boxShadow: 3 }}>
+      <Card
+        sx={{
+          p: 4,
+          maxWidth: 800,
+          width: '100%',
+          borderRadius: 2,
+          boxShadow: 3,
+        }}
+      >
         <Typography variant="h5" gutterBottom color="primary">
           IoT Device Classifier
         </Typography>
 
-        {status === 'success' && jsonData.vendor_classification.label && !jsonData.function_classification.label && (
-          <Alert severity="success" sx={{ mb: 2 }}>
-            Your message has been sent successfully!
-          </Alert>
-        )}
+        {status === 'success' &&
+          jsonData.vendor_classification.label &&
+          !jsonData.function_classification.label && (
+            <Alert severity="success" sx={{ mb: 2 }}>
+              Your message has been sent successfully!
+            </Alert>
+          )}
         {status === 'error' && (
           <Alert severity="error" sx={{ mb: 2 }}>
-            There was an error processing your request. Please try again.
+            There was an error processing your request. Please ensure you've provided at least one field besides MAC address.
           </Alert>
         )}
 
         {/* Display polling feedback */}
         {isPolling && (
-          <Alert severity="info" sx={{ mb: 2, display: 'flex', alignItems: 'center' }}>
+          <Alert
+            severity="info"
+            sx={{ mb: 2, display: 'flex', alignItems: 'center' }}
+          >
             <CircularProgress size={20} color="inherit" sx={{ mr: 2 }} />
             {pollingMessage}
           </Alert>
         )}
 
         {/* Display fetched Vendor and Function Classification */}
-        {jsonData.vendor_classification.label && jsonData.function_classification.label && (
-          <Box sx={{ mb: 4 }}>
-            <Typography variant="h6" gutterBottom>
-              Classification Results:
-            </Typography>
-            <VendorCard
-              vendorClassification={jsonData.vendor_classification}
-              functionClassification={jsonData.function_classification}
-            />
-            {/* Add JustificationCard */}
-            {jsonData.function_classification.justification && (
-              <JustificationCard justification={jsonData.function_classification.justification} />
-            )}
-          </Box>
-        )}
+        {jsonData.vendor_classification.label &&
+          jsonData.function_classification.label && (
+            <Box sx={{ mb: 4 }}>
+              <Typography variant="h6" gutterBottom>
+                Classification Results:
+              </Typography>
+              <VendorCard
+                vendorClassification={jsonData.vendor_classification}
+                functionClassification={jsonData.function_classification}
+              />
+              {/* Add JustificationCard */}
+              {jsonData.function_classification.justification && (
+                <JustificationCard
+                  justification={jsonData.function_classification.justification}
+                />
+              )}
+            </Box>
+          )}
 
         {/* Display output_url elegantly */}
         {outputUrl && (
@@ -347,38 +367,39 @@ const App = () => {
           />
 
           <FormControl component="fieldset">
-            <Typography variant="subtitle1">Choose JSON Input Method:</Typography>
-            <RadioGroup row value={inputMethod} onChange={handleInputMethodChange}>
+            <Typography variant="subtitle1">Choose Input Method:</Typography>
+            <RadioGroup
+              row
+              value={inputMethod}
+              onChange={handleInputMethodChange}
+            >
               <FormControlLabel
-                value="manual"
+                value="inference_api"
                 control={<Radio color="primary" />}
-                label="Enter JSON Manually"
+                label="Inference API"
               />
               <FormControlLabel
-                value="file"
+                value="inference_json"
                 control={<Radio color="primary" />}
-                label="Upload JSON File"
+                label="Inference JSON"
+              />
+              <FormControlLabel
+                value="api_usage"
+                control={<Radio color="primary" />}
+                label="API Usage Instructions"
               />
             </RadioGroup>
           </FormControl>
 
-          {inputMethod === 'manual' && (
+          {inputMethod === 'inference_api' && (
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-              <Typography variant="subtitle1">Vendor Classification:</Typography>
+              <Typography variant="subtitle1">Device Information:</Typography>
               <TextField
                 label="MAC Address"
                 name="mac_address"
                 value={manualInput.mac_address}
                 onChange={handleManualInputChange}
-                fullWidth
-                variant="outlined"
-                color="primary"
-              />
-              <TextField
-                label="OUI Vendor"
-                name="oui_vendor"
-                value={manualInput.oui_vendor}
-                onChange={handleManualInputChange}
+                placeholder="e.g., AA:BB:CC:DD:EE:FF"
                 fullWidth
                 variant="outlined"
                 color="primary"
@@ -388,6 +409,7 @@ const App = () => {
                 name="dhcp.option.hostname"
                 value={manualInput['dhcp.option.hostname']}
                 onChange={handleManualInputChange}
+                placeholder="e.g., host1, host2"
                 fullWidth
                 variant="outlined"
                 color="primary"
@@ -397,6 +419,7 @@ const App = () => {
                 name="dns.qry.name"
                 value={manualInput['dns.qry.name']}
                 onChange={handleManualInputChange}
+                placeholder="e.g., example.com, test.com"
                 fullWidth
                 variant="outlined"
                 color="primary"
@@ -406,6 +429,7 @@ const App = () => {
                 name="http.user_agent"
                 value={manualInput['http.user_agent']}
                 onChange={handleManualInputChange}
+                placeholder="e.g., Mozilla/5.0..."
                 fullWidth
                 variant="outlined"
                 color="primary"
@@ -415,6 +439,7 @@ const App = () => {
                 name="dns.ptr.domain_name"
                 value={manualInput['dns.ptr.domain_name']}
                 onChange={handleManualInputChange}
+                placeholder="e.g., ptr.example.com"
                 fullWidth
                 variant="outlined"
                 color="primary"
@@ -424,6 +449,7 @@ const App = () => {
                 name="dhcp.option.vendor_class_id"
                 value={manualInput['dhcp.option.vendor_class_id']}
                 onChange={handleManualInputChange}
+                placeholder="e.g., class_id1, class_id2"
                 fullWidth
                 variant="outlined"
                 color="primary"
@@ -431,52 +457,111 @@ const App = () => {
             </Box>
           )}
 
-          {inputMethod === 'file' && (
+          {inputMethod === 'inference_json' && (
             <>
-              <Button
-                variant="contained"
-                component="label"
-                startIcon={<InsertDriveFileOutlined />}
-              >
-                Upload JSON File
-                <input
-                  type="file"
-                  accept=".json"
-                  onChange={handleFileChange}
-                  hidden
-                />
-              </Button>
+              <TextField
+                label="Paste JSON Here"
+                name="jsonInput"
+                value={formData.jsonInput}
+                onChange={handleJsonInputChange}
+                multiline
+                rows={10}
+                fullWidth
+                variant="outlined"
+                color="primary"
+                placeholder={`{
+  "device id": {
+    "mac_address": "xx:xx:xx:xx:xx:xx",
+    "dhcp.option.hostname": ["hostname1", "hostname2"],
+    "dns.qry.name": ["example.com"],
+    "http.user_agent": "UserAgentString",
+    "dns.ptr.domain_name": ["ptr.example.com"],
+    "dhcp.option.vendor_class_id": ["class_id"]
+  }
+}`}
+              />
 
               {/* JSON format description */}
-              <Typography variant="body2" color="textSecondary" sx={{ mt: 2 }}>
+              <Typography
+                variant="body2"
+                color="textSecondary"
+                sx={{ mt: 2 }}
+              >
                 <strong>JSON Format Example:</strong>
-                <pre style={{ backgroundColor: '#f5f5f5', padding: '10px', borderRadius: '4px' }}>
-                  {'{\n'}
-                  {'  "device id": {\n'}
-                  {'    "mac_address": "xx:xx:xx:xx:xx:xx",\n'}
-                  {'    "oui_vendor": "VendorName",\n'}
-                  {'    "dhcp.option.hostname": ["hostname1", "hostname2"],\n'}
-                  {'    "dns.qry.name": ["example.com"],\n'}
-                  {'    "http.user_agent": "UserAgentString",\n'}
-                  {'    "dns.ptr.domain_name": ["ptr.example.com"],\n'}
-                  {'    "dhcp.option.vendor_class_id": ["class_id"]\n'}
-                  {'  }\n'}
-                  {'}'}
-                </pre>
               </Typography>
             </>
           )}
 
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            size="large"
-            fullWidth
-            disabled={isPolling} // Disable button during polling
-          >
-            {isPolling ? 'Classifying...' : 'Classify'}
-          </Button>
+          {inputMethod === 'api_usage' && (
+            <Box sx={{ mt: 2 }}>
+              <Typography variant="h6" gutterBottom>
+                API Usage Instructions
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                You can use the API directly by making HTTP POST requests to the
+                following endpoint:
+              </Typography>
+              <Typography variant="body2" sx={{ mb: 2 }}>
+                <code>
+                  https://qxzcncmpw4.execute-api.eu-west-2.amazonaws.com/bar_test_stage/classify
+                </code>
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                Below is a Python code example using the <code>requests</code>{' '}
+                library:
+              </Typography>
+              <pre
+                style={{
+                  backgroundColor: '#f5f5f5',
+                  padding: '10px',
+                  borderRadius: '4px',
+                  overflowX: 'auto',
+                }}
+              >
+                {`import requests
+import json
+
+url = "https://qxzcncmpw4.execute-api.eu-west-2.amazonaws.com/bar_test_stage/classify"
+api_key = "YOUR_API_KEY"
+
+headers = {
+    "Content-Type": "application/json",
+    "x-api-key": api_key
+}
+
+data = {
+    "device id": {
+        "mac_address": "xx:xx:xx:xx:xx:xx",
+        "dhcp.option.hostname": ["hostname1", "hostname2"],
+        "dns.qry.name": ["example.com"],
+        "http.user_agent": "UserAgentString",
+        "dns.ptr.domain_name": ["ptr.example.com"],
+        "dhcp.option.vendor_class_id": ["class_id"]
+    }
+}
+
+response = requests.post(url, headers=headers, data=json.dumps(data))
+
+if response.ok:
+    print("Response:", response.json())
+else:
+    print("Error:", response.text)`}
+              </pre>
+            </Box>
+          )}
+
+          {inputMethod !== 'api_usage' && (
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              size="large"
+              fullWidth
+              disabled={isPolling} // Disable button during polling
+            >
+              {isPolling ? 'Classifying...' : 'Classify'}
+            </Button>
+          )}
         </Stack>
       </Card>
     </Box>
