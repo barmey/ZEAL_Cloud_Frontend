@@ -400,6 +400,7 @@ const App = () => {
                 value={manualInput.mac_address}
                 onChange={handleManualInputChange}
                 placeholder="e.g., AA:BB:CC:DD:EE:FF"
+                helperText="Example: AA:BB:CC:DD:EE:FF"
                 fullWidth
                 variant="outlined"
                 color="primary"
@@ -410,6 +411,7 @@ const App = () => {
                 value={manualInput['dhcp.option.hostname']}
                 onChange={handleManualInputChange}
                 placeholder="e.g., host1, host2"
+                helperText="Example: host1, host2"
                 fullWidth
                 variant="outlined"
                 color="primary"
@@ -420,6 +422,7 @@ const App = () => {
                 value={manualInput['dns.qry.name']}
                 onChange={handleManualInputChange}
                 placeholder="e.g., example.com, test.com"
+                helperText="Example: example.com, test.com"
                 fullWidth
                 variant="outlined"
                 color="primary"
@@ -430,6 +433,7 @@ const App = () => {
                 value={manualInput['http.user_agent']}
                 onChange={handleManualInputChange}
                 placeholder="e.g., Mozilla/5.0..."
+                helperText="Example: Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
                 fullWidth
                 variant="outlined"
                 color="primary"
@@ -440,6 +444,7 @@ const App = () => {
                 value={manualInput['dns.ptr.domain_name']}
                 onChange={handleManualInputChange}
                 placeholder="e.g., ptr.example.com"
+                helperText="Example: ptr.example.com"
                 fullWidth
                 variant="outlined"
                 color="primary"
@@ -450,6 +455,7 @@ const App = () => {
                 value={manualInput['dhcp.option.vendor_class_id']}
                 onChange={handleManualInputChange}
                 placeholder="e.g., class_id1, class_id2"
+                helperText="Example: MSFT 5.0, MSFT 5.1"
                 fullWidth
                 variant="outlined"
                 color="primary"
@@ -479,6 +485,7 @@ const App = () => {
     "dhcp.option.vendor_class_id": ["class_id"]
   }
 }`}
+                helperText="Example JSON structure is shown in the placeholder."
               />
 
               {/* JSON format description */}
