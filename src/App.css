@@ -58,6 +58,12 @@ a:hover {
   text-decoration: underline;
 }
 
+/* Dark Bold Blue Text Class */
+.dark-bold-blue-text {
+  color: #0D47A1; /* Dark bold blue */
+  font-weight: bold;
+}
+
 /* Form and Button Styling */
 button, input, select, textarea {
   font-family: 'Roboto Mono', monospace;
