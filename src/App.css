@@ -12,7 +12,7 @@ body {
 
 /* Background styling for the main application */
 .app-background {
-  background-image: url('./assets/background.png'); /* Ensure this path matches your image location */
+  background-image: url('./components/background_ZEAL.png'); /* Ensure this path matches your image location */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
