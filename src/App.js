@@ -342,15 +342,6 @@ const App = () => {
               </Link>
             </Typography>
 
-            {/* Include the main image */}
-            <Box sx={{ mt: 2, textAlign: 'center' }}>
-              <img
-                src={mainImage}
-                alt="IoT Devices"
-                style={{ maxWidth: '20%', borderRadius: '8px' }}
-              />
-            </Box>
-
             <Typography
               variant="h6"
               gutterBottom
