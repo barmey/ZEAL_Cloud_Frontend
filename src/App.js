@@ -309,7 +309,8 @@ const App = () => {
         </AppBar>
         <Container maxWidth="md">
           {/* Moved About Us and Academic Use sections to the top */}
-          <Box sx={{ width: '100%', mt: 4 }}>
+          <Box sx={{ width: '100%', mt: 4 }}            className="dark-bold-blue-text" // Apply the dark bold blue text class
+>
             <Typography
               variant="h6"
               gutterBottom
