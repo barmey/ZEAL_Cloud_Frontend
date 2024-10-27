@@ -347,7 +347,7 @@ const App = () => {
             <img
               src={mainImage}
               alt="IoT Devices"
-              style={{ maxWidth: '100%', borderRadius: '8px' }}
+              style={{ maxWidth: '20%', borderRadius: '8px' }}
             />
           </Box>
               }
