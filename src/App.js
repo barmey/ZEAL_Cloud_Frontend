@@ -35,6 +35,7 @@ import {
 import VendorCard from './components/VendorCard';
 import JustificationCard from './components/JustificationCard';
 import { v4 as uuidv4 } from 'uuid';
+import mainImage from './components/main_image.png'; // Import the main image
 
 Amplify.configure(awsExports);
 
@@ -342,13 +343,14 @@ const App = () => {
 
           {/* Placeholder for an IoT image */}
           {/* Uncomment and replace the src with your image path if desired */}
-          {/* <Box sx={{ mt: 2, textAlign: 'center' }}>
+          { <Box sx={{ mt: 2, textAlign: 'center' }}>
             <img
-              src="path_to_your_image.jpg"
+              src={mainImage}
               alt="IoT Devices"
               style={{ maxWidth: '100%', borderRadius: '8px' }}
             />
-          </Box> */}
+          </Box>
+              }
 
           <Typography
             variant="h6"
