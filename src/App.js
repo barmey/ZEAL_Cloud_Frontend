@@ -306,6 +306,80 @@ const App = () => {
         </Toolbar>
       </AppBar>
       <Container maxWidth="md">
+        {/* Moved About Us and Academic Use sections to the top */}
+        <Box sx={{ width: '100%', mt: 4 }}>
+          <Typography
+            variant="h6"
+            gutterBottom
+            sx={{ display: 'flex', alignItems: 'center' }}
+          >
+            <InfoIcon sx={{ mr: 1 }} />
+            About Us
+          </Typography>
+          <Typography variant="body1" gutterBottom>
+            We at the research group <strong>Deepness Lab</strong> developed a
+            labeling system for unseen IoT devices. We aim to provide visibility
+            to the devices connected to your networks and reveal both the vendor
+            (e.g., Nest, Ring) and function (e.g., speaker, camera, vacuum
+            cleaner). We address the challenge of type labeling of an unseen IoT
+            device. We introduce a novel IoT labeling system, Zero-shot Engine
+            for IoT Asset Labeling (ZEAL).
+            <br />
+            To use this cloud-based system, you can reach out to us at{' '}
+            <Link href="mailto:deepnesslab@tauex.tau.ac.il">
+              deepnesslab@tauex.tau.ac.il
+            </Link>{' '}
+            to get access (API key) to the system. For more information and
+            research, visit our website:{' '}
+            <Link
+              href="https://deepness-lab.org/publications/"
+              target="_blank"
+              rel="noopener"
+            >
+              https://deepness-lab.org/publications/
+            </Link>
+          </Typography>
+
+          {/* Placeholder for an IoT image */}
+          {/* Uncomment and replace the src with your image path if desired */}
+          {/* <Box sx={{ mt: 2, textAlign: 'center' }}>
+            <img
+              src="path_to_your_image.jpg"
+              alt="IoT Devices"
+              style={{ maxWidth: '100%', borderRadius: '8px' }}
+            />
+          </Box> */}
+
+          <Typography
+            variant="h6"
+            gutterBottom
+            sx={{ mt: 4, display: 'flex', alignItems: 'center' }}
+          >
+            <SchoolIcon sx={{ mr: 1 }} />
+            Academic Use
+          </Typography>
+          <Typography variant="body1" gutterBottom>
+            Any use of the system for academic research is encouraged. We kindly
+            ask you to cite our paper:
+          </Typography>
+          <pre
+            style={{
+              backgroundColor: '#f5f5f5',
+              padding: '10px',
+              borderRadius: '4px',
+              overflowX: 'auto',
+            }}
+          >
+            {`@misc{Bremler-Barr2024b,
+  author = {Anat Bremler-Barr and Bar Meyuhas and Tal Shapira},
+  title = {IoT Device Labeling Using Large Language Models},
+  year = {2024},
+  url = {https://deepness-lab.org/publications/iot-device-labeling-using-large-language-models/},
+}`}
+          </pre>
+        </Box>
+
+        {/* The form starts here */}
         <Box
           component="form"
           onSubmit={handleSubmit}
@@ -315,6 +389,7 @@ const App = () => {
             alignItems: 'center',
             gap: 2,
             backgroundColor: 'background.default',
+            mt: 4, // Add margin top to separate from the above sections
           }}
         >
           <Card
@@ -396,6 +471,7 @@ const App = () => {
                 InputProps={{
                   startAdornment: <VpnKeyIcon color="action" sx={{ mr: 1 }} />,
                 }}
+                helperText="To get an API key, please send an email to deepnesslab@tauex.tau.ac.il."
               />
 
               <FormControl component="fieldset">
@@ -672,80 +748,7 @@ else:
             </Stack>
           </Card>
 
-          {/* Add new sections below the form */}
-          <Box sx={{ width: '100%', mt: 4 }}>
-            <Typography
-              variant="h6"
-              gutterBottom
-              sx={{ display: 'flex', alignItems: 'center' }}
-            >
-              <InfoIcon sx={{ mr: 1 }} />
-              About Us
-            </Typography>
-            <Typography variant="body1" gutterBottom>
-              We at the research group <strong>Deepness Lab</strong> developed a
-              labeling system for unseen IoT devices. We aim to provide visibility
-              to the devices connected to your networks and reveal both the vendor
-              (e.g., Nest, Ring) and function (e.g., speaker, camera, vacuum
-              cleaner). We address the challenge of type labeling of an unseen IoT
-              device. We introduce a novel IoT labeling system, Zero-shot Engine
-              for IoT Asset Labeling (ZEAL).
-              <br />
-              To use this cloud-based system, you can reach out to us at{' '}
-              <Link href="mailto:deepnesslab@tauex.tau.ac.il">
-                deepnesslab@tauex.tau.ac.il
-              </Link>{' '}
-              to get access (API key) to the system. For more information and
-              research, visit our website:{' '}
-              <Link
-                href="https://deepness-lab.org/publications/"
-                target="_blank"
-                rel="noopener"
-              >
-                https://deepness-lab.org/publications/
-              </Link>
-            </Typography>
-
-            {/* Placeholder for an IoT image */}
-            {/* Uncomment and replace the src with your image path if desired */}
-            {/* <Box sx={{ mt: 2, textAlign: 'center' }}>
-              <img
-                src="path_to_your_image.jpg"
-                alt="IoT Devices"
-                style={{ maxWidth: '100%', borderRadius: '8px' }}
-              />
-            </Box> */}
-
-            <Typography
-              variant="h6"
-              gutterBottom
-              sx={{ mt: 4, display: 'flex', alignItems: 'center' }}
-            >
-              <SchoolIcon sx={{ mr: 1 }} />
-              Academic Use
-            </Typography>
-            <Typography variant="body1" gutterBottom>
-              Any use of the system for academic research is encouraged. We kindly
-              ask you to cite our paper:
-            </Typography>
-            <pre
-              style={{
-                backgroundColor: '#f5f5f5',
-                padding: '10px',
-                borderRadius: '4px',
-                overflowX: 'auto',
-              }}
-            >
-              {`@misc{Bremler-Barr2024b,
-  author = {Anat Bremler-Barr and Bar Meyuhas and Tal Shapira},
-  title = {IoT Device Labeling Using Large Language Models},
-  year = {2024},
-  url = {https://deepness-lab.org/publications/iot-device-labeling-using-large-language-models/},
-}`}
-            </pre>
-          </Box>
-
-          {/* Footer with copyright and Google Scholar icon */}
+          {/* Footer with copyright and icons */}
           <Box
             sx={{
               mt: 4,
