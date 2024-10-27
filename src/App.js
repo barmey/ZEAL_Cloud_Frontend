@@ -360,6 +360,7 @@ const App = () => {
                 padding: '10px',
                 borderRadius: '8px',
                 overflowX: 'auto',
+                color: '#333',
               }}
             >
               {`@misc{Bremler-Barr2024b,
