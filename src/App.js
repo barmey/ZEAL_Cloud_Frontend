@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Amplify } from 'aws-amplify';
 import awsExports from './aws-exports';
-import './App.css';
+import './App.css'; // Ensure that the CSS file is imported
 import {
   Box,
   Button,
@@ -298,349 +298,348 @@ const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <AppBar position="static" sx={{ mb: 4 }}>
-        <Toolbar>
-          <DeviceHubIcon sx={{ mr: 1 }} />
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            IoT Device Classifier
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Container maxWidth="md">
-        {/* Moved About Us and Academic Use sections to the top */}
-        <Box sx={{ width: '100%', mt: 4 }}>
-          <Typography
-            variant="h6"
-            gutterBottom
-            sx={{ display: 'flex', alignItems: 'center' }}
-          >
-            <InfoIcon sx={{ mr: 1 }} />
-            About Us
-          </Typography>
-          <Typography variant="body1" gutterBottom>
-            We at the research group <strong>Deepness Lab</strong> developed a
-            labeling system for unseen IoT devices. We aim to provide visibility
-            to the devices connected to your networks and reveal both the vendor
-            (e.g., Nest, Ring) and function (e.g., speaker, camera, vacuum
-            cleaner). We address the challenge of type labeling of an unseen IoT
-            device. We introduce a novel IoT labeling system, Zero-shot Engine
-            for IoT Asset Labeling (ZEAL).
-            <br />
-            To use this cloud-based system, you can reach out to us at{' '}
-            <Link href="mailto:deepnesslab@tauex.tau.ac.il">
-              deepnesslab@tauex.tau.ac.il
-            </Link>{' '}
-            to get access (API key) to the system. For more information and
-            research, visit our website:{' '}
-            <Link
-              href="https://deepness-lab.org/publications/"
-              target="_blank"
-              rel="noopener"
+      <div className="app-background"> {/* Apply the background image class */}
+        <AppBar position="static" sx={{ mb: 4 }}>
+          <Toolbar>
+            <DeviceHubIcon sx={{ mr: 1 }} />
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              IoT Device Classifier
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        <Container maxWidth="md">
+          {/* Moved About Us and Academic Use sections to the top */}
+          <Box sx={{ width: '100%', mt: 4 }}>
+            <Typography
+              variant="h6"
+              gutterBottom
+              sx={{ display: 'flex', alignItems: 'center' }}
             >
-              https://deepness-lab.org/publications/
-            </Link>
-          </Typography>
+              <InfoIcon sx={{ mr: 1 }} />
+              About Us
+            </Typography>
+            <Typography variant="body1" gutterBottom>
+              We at the research group <strong>Deepness Lab</strong> developed a
+              labeling system for unseen IoT devices. We aim to provide visibility
+              to the devices connected to your networks and reveal both the vendor
+              (e.g., Nest, Ring) and function (e.g., speaker, camera, vacuum
+              cleaner). We address the challenge of type labeling of an unseen IoT
+              device. We introduce a novel IoT labeling system, Zero-shot Engine
+              for IoT Asset Labeling (ZEAL).
+              <br />
+              To use this cloud-based system, you can reach out to us at{' '}
+              <Link href="mailto:deepnesslab@tauex.tau.ac.il">
+                deepnesslab@tauex.tau.ac.il
+              </Link>{' '}
+              to get access (API key) to the system. For more information and
+              research, visit our website:{' '}
+              <Link
+                href="https://deepness-lab.org/publications/"
+                target="_blank"
+                rel="noopener"
+              >
+                https://deepness-lab.org/publications/
+              </Link>
+            </Typography>
 
-          {/* Placeholder for an IoT image */}
-          {/* Uncomment and replace the src with your image path if desired */}
-          { <Box sx={{ mt: 2, textAlign: 'center' }}>
-            <img
-              src={mainImage}
-              alt="IoT Devices"
-              style={{ maxWidth: '20%', borderRadius: '8px' }}
-            />
-          </Box>
-              }
+            {/* Include the main image */}
+            <Box sx={{ mt: 2, textAlign: 'center' }}>
+              <img
+                src={mainImage}
+                alt="IoT Devices"
+                style={{ maxWidth: '20%', borderRadius: '8px' }}
+              />
+            </Box>
 
-          <Typography
-            variant="h6"
-            gutterBottom
-            sx={{ mt: 4, display: 'flex', alignItems: 'center' }}
-          >
-            <SchoolIcon sx={{ mr: 1 }} />
-            Academic Use
-          </Typography>
-          <Typography variant="body1" gutterBottom>
-            Any use of the system for academic research is encouraged. We kindly
-            ask you to cite our paper:
-          </Typography>
-          <pre
-            style={{
-              backgroundColor: '#f5f5f5',
-              padding: '10px',
-              borderRadius: '4px',
-              overflowX: 'auto',
-            }}
-          >
-            {`@misc{Bremler-Barr2024b,
+            <Typography
+              variant="h6"
+              gutterBottom
+              sx={{ mt: 4, display: 'flex', alignItems: 'center' }}
+            >
+              <SchoolIcon sx={{ mr: 1 }} />
+              Academic Use
+            </Typography>
+            <Typography variant="body1" gutterBottom>
+              Any use of the system for academic research is encouraged. We kindly
+              ask you to cite our paper:
+            </Typography>
+            <pre
+              style={{
+                backgroundColor: '#f5f5f5',
+                padding: '10px',
+                borderRadius: '8px',
+                overflowX: 'auto',
+              }}
+            >
+              {`@misc{Bremler-Barr2024b,
   author = {Anat Bremler-Barr and Bar Meyuhas and Tal Shapira},
   title = {IoT Device Labeling Using Large Language Models},
   year = {2024},
   url = {https://deepness-lab.org/publications/iot-device-labeling-using-large-language-models/},
 }`}
-          </pre>
-        </Box>
+            </pre>
+          </Box>
 
-        {/* The form starts here */}
-        <Box
-          component="form"
-          onSubmit={handleSubmit}
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: 2,
-            backgroundColor: 'background.default',
-            mt: 4, // Add margin top to separate from the above sections
-          }}
-        >
-          <Card
+          {/* The form starts here */}
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
             sx={{
-              p: 4,
-              width: '100%',
-              borderRadius: 2,
-              boxShadow: 3,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: 2,
+              backgroundColor: 'background.default',
+              mt: 4, // Add margin top to separate from the above sections
             }}
           >
-            {status === 'success' &&
-              jsonData.vendor_classification.label &&
-              !jsonData.function_classification.label && (
-                <Alert severity="success" sx={{ mb: 2 }}>
-                  Your message has been sent successfully!
+            <Card
+              sx={{
+                p: 4,
+                width: '100%',
+                borderRadius: 2,
+                boxShadow: 3,
+              }}
+            >
+              {status === 'success' &&
+                jsonData.vendor_classification.label &&
+                !jsonData.function_classification.label && (
+                  <Alert severity="success" sx={{ mb: 2 }}>
+                    Your message has been sent successfully!
+                  </Alert>
+                )}
+              {status === 'error' && (
+                <Alert severity="error" sx={{ mb: 2 }}>
+                  There was an error processing your request. Please ensure you've
+                  provided at least one field besides MAC address.
                 </Alert>
               )}
-            {status === 'error' && (
-              <Alert severity="error" sx={{ mb: 2 }}>
-                There was an error processing your request. Please ensure you've
-                provided at least one field besides MAC address.
-              </Alert>
-            )}
 
-            {/* Display polling feedback */}
-            {isPolling && (
-              <Alert
-                severity="info"
-                sx={{ mb: 2, display: 'flex', alignItems: 'center' }}
-              >
-                <CircularProgress size={20} color="inherit" sx={{ mr: 2 }} />
-                {pollingMessage}
-              </Alert>
-            )}
+              {/* Display polling feedback */}
+              {isPolling && (
+                <Alert
+                  severity="info"
+                  sx={{ mb: 2, display: 'flex', alignItems: 'center' }}
+                >
+                  <CircularProgress size={20} color="inherit" sx={{ mr: 2 }} />
+                  {pollingMessage}
+                </Alert>
+              )}
 
-            {/* Display fetched Vendor and Function Classification */}
-            {jsonData.vendor_classification.label &&
-              jsonData.function_classification.label && (
-                <Box sx={{ mb: 4 }}>
-                  <Typography variant="h6" gutterBottom>
-                    Classification Results:
-                  </Typography>
-                  <VendorCard
-                    vendorClassification={jsonData.vendor_classification}
-                    functionClassification={jsonData.function_classification}
-                  />
-                  {/* Add JustificationCard */}
-                  {jsonData.function_classification.justification && (
-                    <JustificationCard
-                      justification={jsonData.function_classification.justification}
+              {/* Display fetched Vendor and Function Classification */}
+              {jsonData.vendor_classification.label &&
+                jsonData.function_classification.label && (
+                  <Box sx={{ mb: 4 }}>
+                    <Typography variant="h6" gutterBottom>
+                      Classification Results:
+                    </Typography>
+                    <VendorCard
+                      vendorClassification={jsonData.vendor_classification}
+                      functionClassification={jsonData.function_classification}
                     />
-                  )}
-                </Box>
+                    {/* Add JustificationCard */}
+                    {jsonData.function_classification.justification && (
+                      <JustificationCard
+                        justification={jsonData.function_classification.justification}
+                      />
+                    )}
+                  </Box>
+                )}
+
+              {/* Display output_url elegantly */}
+              {outputUrl && (
+                <Alert severity="info" sx={{ mb: 2 }}>
+                  <Typography variant="subtitle1">
+                    When results are ready, you can view them here:{' '}
+                  </Typography>
+                  <Link href={outputUrl} target="_blank" rel="noopener">
+                    View Results
+                  </Link>
+                </Alert>
               )}
 
-            {/* Display output_url elegantly */}
-            {outputUrl && (
-              <Alert severity="info" sx={{ mb: 2 }}>
-                <Typography variant="subtitle1">
-                  When results are ready, you can view them here:{' '}
-                </Typography>
-                <Link href={outputUrl} target="_blank" rel="noopener">
-                  View Results
-                </Link>
-              </Alert>
-            )}
+              <Stack spacing={2}>
+                <TextField
+                  label="API Key"
+                  name="apiKey"
+                  type="password"
+                  value={formData.apiKey}
+                  onChange={handleChange}
+                  required
+                  fullWidth
+                  variant="outlined"
+                  color="primary"
+                  InputProps={{
+                    startAdornment: <VpnKeyIcon color="action" sx={{ mr: 1 }} />,
+                  }}
+                  helperText="To get an API key, please send an email to deepnesslab@tauex.tau.ac.il."
+                />
 
-            <Stack spacing={2}>
-              <TextField
-                label="API Key"
-                name="apiKey"
-                type="password"
-                value={formData.apiKey}
-                onChange={handleChange}
-                required
-                fullWidth
-                variant="outlined"
-                color="primary"
-                InputProps={{
-                  startAdornment: <VpnKeyIcon color="action" sx={{ mr: 1 }} />,
-                }}
-                helperText="To get an API key, please send an email to deepnesslab@tauex.tau.ac.il."
-              />
-
-              <FormControl component="fieldset">
-                <Typography
-                  variant="subtitle1"
-                  sx={{ display: 'flex', alignItems: 'center' }}
-                >
-                  <InputIcon sx={{ mr: 1 }} /> Choose Input Method:
-                </Typography>
-                <RadioGroup
-                  row
-                  value={inputMethod}
-                  onChange={handleInputMethodChange}
-                >
-                  <FormControlLabel
-                    value="inference_api"
-                    control={<Radio color="primary" />}
-                    label="Inference API"
-                  />
-                  <FormControlLabel
-                    value="inference_json"
-                    control={<Radio color="primary" />}
-                    label="Inference JSON"
-                  />
-                  <FormControlLabel
-                    value="api_usage"
-                    control={<Radio color="primary" />}
-                    label="API Usage Instructions"
-                  />
-                </RadioGroup>
-              </FormControl>
-
-              {inputMethod === 'inference_api' && (
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                <FormControl component="fieldset">
                   <Typography
                     variant="subtitle1"
                     sx={{ display: 'flex', alignItems: 'center' }}
                   >
-                    <DeviceHubIcon sx={{ mr: 1 }} />
-                    Device Information:
+                    <InputIcon sx={{ mr: 1 }} /> Choose Input Method:
                   </Typography>
-                  {/* Manual input fields with specific helperText */}
-                  <TextField
-                    label="MAC Address"
-                    name="mac_address"
-                    value={manualInput['mac_address']}
-                    onChange={handleManualInputChange}
-                    helperText="Example: AA:BB:CC:DD:EE:FF"
-                    fullWidth
-                    variant="outlined"
-                    color="primary"
-                    InputProps={{
-                      startAdornment: (
-                        <IconButton edge="start" disabled>
-                          <InputIcon />
-                        </IconButton>
-                      ),
-                    }}
-                  />
-                  <TextField
-                    label="DHCP Hostname (comma-separated)"
-                    name="dhcp.option.hostname"
-                    value={manualInput['dhcp.option.hostname']}
-                    onChange={handleManualInputChange}
-                    helperText="Example: host1, host2"
-                    fullWidth
-                    variant="outlined"
-                    color="primary"
-                    InputProps={{
-                      startAdornment: (
-                        <IconButton edge="start" disabled>
-                          <InputIcon />
-                        </IconButton>
-                      ),
-                    }}
-                  />
-                  <TextField
-                    label="Domains (comma-separated)"
-                    name="dns.qry.name"
-                    value={manualInput['dns.qry.name']}
-                    onChange={handleManualInputChange}
-                    helperText="Example: example.com, test.com"
-                    fullWidth
-                    variant="outlined"
-                    color="primary"
-                    InputProps={{
-                      startAdornment: (
-                        <IconButton edge="start" disabled>
-                          <InputIcon />
-                        </IconButton>
-                      ),
-                    }}
-                  />
-                  <TextField
-                    label="HTTP User Agent"
-                    name="http.user_agent"
-                    value={manualInput['http.user_agent']}
-                    onChange={handleManualInputChange}
-                    helperText="Example: Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
-                    fullWidth
-                    variant="outlined"
-                    color="primary"
-                    InputProps={{
-                      startAdornment: (
-                        <IconButton edge="start" disabled>
-                          <InputIcon />
-                        </IconButton>
-                      ),
-                    }}
-                  />
-                  <TextField
-                    label="DNS PTR (comma-separated)"
-                    name="dns.ptr.domain_name"
-                    value={manualInput['dns.ptr.domain_name']}
-                    onChange={handleManualInputChange}
-                    helperText="Example: ptr.example.com"
-                    fullWidth
-                    variant="outlined"
-                    color="primary"
-                    InputProps={{
-                      startAdornment: (
-                        <IconButton edge="start" disabled>
-                          <InputIcon />
-                        </IconButton>
-                      ),
-                    }}
-                  />
-                  <TextField
-                    label="Vendor Class ID (comma-separated)"
-                    name="dhcp.option.vendor_class_id"
-                    value={manualInput['dhcp.option.vendor_class_id']}
-                    onChange={handleManualInputChange}
-                    helperText="Example: MSFT 5.0, MSFT 5.1"
-                    fullWidth
-                    variant="outlined"
-                    color="primary"
-                    InputProps={{
-                      startAdornment: (
-                        <IconButton edge="start" disabled>
-                          <InputIcon />
-                        </IconButton>
-                      ),
-                    }}
-                  />
-                </Box>
-              )}
+                  <RadioGroup
+                    row
+                    value={inputMethod}
+                    onChange={handleInputMethodChange}
+                  >
+                    <FormControlLabel
+                      value="inference_api"
+                      control={<Radio color="primary" />}
+                      label="Inference API"
+                    />
+                    <FormControlLabel
+                      value="inference_json"
+                      control={<Radio color="primary" />}
+                      label="Inference JSON"
+                    />
+                    <FormControlLabel
+                      value="api_usage"
+                      control={<Radio color="primary" />}
+                      label="API Usage Instructions"
+                    />
+                  </RadioGroup>
+                </FormControl>
 
-              {inputMethod === 'inference_json' && (
-                <>
-                  <Typography
-                    variant="subtitle1"
-                    sx={{ display: 'flex', alignItems: 'center' }}
-                  >
-                    <InputIcon sx={{ mr: 1 }} />
-                    Paste JSON Here:
-                  </Typography>
-                  {/* Display the JSON example */}
-                  <pre
-                    style={{
-                      backgroundColor: '#f5f5f5',
-                      padding: '10px',
-                      borderRadius: '4px',
-                      overflowX: 'auto',
-                      marginBottom: '16px',
-                    }}
-                  >
-                    {`{
+                {inputMethod === 'inference_api' && (
+                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                    <Typography
+                      variant="subtitle1"
+                      sx={{ display: 'flex', alignItems: 'center' }}
+                    >
+                      <DeviceHubIcon sx={{ mr: 1 }} />
+                      Device Information:
+                    </Typography>
+                    {/* Manual input fields with specific helperText */}
+                    <TextField
+                      label="MAC Address"
+                      name="mac_address"
+                      value={manualInput['mac_address']}
+                      onChange={handleManualInputChange}
+                      helperText="Example: AA:BB:CC:DD:EE:FF"
+                      fullWidth
+                      variant="outlined"
+                      color="primary"
+                      InputProps={{
+                        startAdornment: (
+                          <IconButton edge="start" disabled>
+                            <InputIcon />
+                          </IconButton>
+                        ),
+                      }}
+                    />
+                    <TextField
+                      label="DHCP Hostname (comma-separated)"
+                      name="dhcp.option.hostname"
+                      value={manualInput['dhcp.option.hostname']}
+                      onChange={handleManualInputChange}
+                      helperText="Example: host1, host2"
+                      fullWidth
+                      variant="outlined"
+                      color="primary"
+                      InputProps={{
+                        startAdornment: (
+                          <IconButton edge="start" disabled>
+                            <InputIcon />
+                          </IconButton>
+                        ),
+                      }}
+                    />
+                    <TextField
+                      label="Domains (comma-separated)"
+                      name="dns.qry.name"
+                      value={manualInput['dns.qry.name']}
+                      onChange={handleManualInputChange}
+                      helperText="Example: example.com, test.com"
+                      fullWidth
+                      variant="outlined"
+                      color="primary"
+                      InputProps={{
+                        startAdornment: (
+                          <IconButton edge="start" disabled>
+                            <InputIcon />
+                          </IconButton>
+                        ),
+                      }}
+                    />
+                    <TextField
+                      label="HTTP User Agent"
+                      name="http.user_agent"
+                      value={manualInput['http.user_agent']}
+                      onChange={handleManualInputChange}
+                      helperText="Example: Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+                      fullWidth
+                      variant="outlined"
+                      color="primary"
+                      InputProps={{
+                        startAdornment: (
+                          <IconButton edge="start" disabled>
+                            <InputIcon />
+                          </IconButton>
+                        ),
+                      }}
+                    />
+                    <TextField
+                      label="DNS PTR (comma-separated)"
+                      name="dns.ptr.domain_name"
+                      value={manualInput['dns.ptr.domain_name']}
+                      onChange={handleManualInputChange}
+                      helperText="Example: ptr.example.com"
+                      fullWidth
+                      variant="outlined"
+                      color="primary"
+                      InputProps={{
+                        startAdornment: (
+                          <IconButton edge="start" disabled>
+                            <InputIcon />
+                          </IconButton>
+                        ),
+                      }}
+                    />
+                    <TextField
+                      label="Vendor Class ID (comma-separated)"
+                      name="dhcp.option.vendor_class_id"
+                      value={manualInput['dhcp.option.vendor_class_id']}
+                      onChange={handleManualInputChange}
+                      helperText="Example: MSFT 5.0, MSFT 5.1"
+                      fullWidth
+                      variant="outlined"
+                      color="primary"
+                      InputProps={{
+                        startAdornment: (
+                          <IconButton edge="start" disabled>
+                            <InputIcon />
+                          </IconButton>
+                        ),
+                      }}
+                    />
+                  </Box>
+                )}
+
+                {inputMethod === 'inference_json' && (
+                  <>
+                    <Typography
+                      variant="subtitle1"
+                      sx={{ display: 'flex', alignItems: 'center' }}
+                    >
+                      <InputIcon sx={{ mr: 1 }} />
+                      Paste JSON Here:
+                    </Typography>
+                    {/* Display the JSON example */}
+                    <pre
+                      style={{
+                        backgroundColor: '#f5f5f5',
+                        padding: '10px',
+                        borderRadius: '8px',
+                        overflowX: 'auto',
+                        marginBottom: '16px',
+                      }}
+                    >
+                      {`{
   "device id": {
     "mac_address": "xx:xx:xx:xx:xx:xx",
     "dhcp.option.hostname": ["hostname1", "hostname2"],
@@ -650,18 +649,18 @@ const App = () => {
     "dhcp.option.vendor_class_id": ["class_id"]
   }
 }`}
-                  </pre>
-                  <TextField
-                    label="JSON Input"
-                    name="jsonInput"
-                    value={formData.jsonInput}
-                    onChange={handleJsonInputChange}
-                    multiline
-                    rows={10}
-                    fullWidth
-                    variant="outlined"
-                    color="primary"
-                    placeholder={`{
+                    </pre>
+                    <TextField
+                      label="JSON Input"
+                      name="jsonInput"
+                      value={formData.jsonInput}
+                      onChange={handleJsonInputChange}
+                      multiline
+                      rows={10}
+                      fullWidth
+                      variant="outlined"
+                      color="primary"
+                      placeholder={`{
   "device id": {
     "mac_address": "xx:xx:xx:xx:xx:xx",
     "dhcp.option.hostname": ["hostname1", "hostname2"],
@@ -671,38 +670,38 @@ const App = () => {
     "dhcp.option.vendor_class_id": ["class_id"]
   }
 }`}
-                    helperText="Example JSON structure is shown in the placeholder above."
-                  />
-                </>
-              )}
+                      helperText="Example JSON structure is shown in the placeholder above."
+                    />
+                  </>
+                )}
 
-              {inputMethod === 'api_usage' && (
-                <Box sx={{ mt: 2 }}>
-                  <Typography variant="h6" gutterBottom>
-                    API Usage Instructions
-                  </Typography>
-                  <Typography variant="body1" gutterBottom>
-                    You can use the API directly by making HTTP POST requests to the
-                    following endpoint:
-                  </Typography>
-                  <Typography variant="body2" sx={{ mb: 2 }}>
-                    <code>
-                      https://qxzcncmpw4.execute-api.eu-west-2.amazonaws.com/bar_test_stage/classify
-                    </code>
-                  </Typography>
-                  <Typography variant="body1" gutterBottom>
-                    Below is a Python code example using the <code>requests</code>{' '}
-                    library:
-                  </Typography>
-                  <pre
-                    style={{
-                      backgroundColor: '#f5f5f5',
-                      padding: '10px',
-                      borderRadius: '4px',
-                      overflowX: 'auto',
-                    }}
-                  >
-                    {`import requests
+                {inputMethod === 'api_usage' && (
+                  <Box sx={{ mt: 2 }}>
+                    <Typography variant="h6" gutterBottom>
+                      API Usage Instructions
+                    </Typography>
+                    <Typography variant="body1" gutterBottom>
+                      You can use the API directly by making HTTP POST requests to the
+                      following endpoint:
+                    </Typography>
+                    <Typography variant="body2" sx={{ mb: 2 }}>
+                      <code>
+                        https://qxzcncmpw4.execute-api.eu-west-2.amazonaws.com/bar_test_stage/classify
+                      </code>
+                    </Typography>
+                    <Typography variant="body1" gutterBottom>
+                      Below is a Python code example using the <code>requests</code>{' '}
+                      library:
+                    </Typography>
+                    <pre
+                      style={{
+                        backgroundColor: '#f5f5f5',
+                        padding: '10px',
+                        borderRadius: '8px',
+                        overflowX: 'auto',
+                      }}
+                    >
+                      {`import requests
 import json
 
 url = "https://qxzcncmpw4.execute-api.eu-west-2.amazonaws.com/bar_test_stage/classify"
@@ -730,61 +729,62 @@ if response.ok:
     print("Response:", response.json())
 else:
     print("Error:", response.text)`}
-                  </pre>
-                </Box>
-              )}
+                    </pre>
+                  </Box>
+                )}
 
-              {inputMethod !== 'api_usage' && (
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  size="large"
-                  fullWidth
-                  disabled={isPolling}
-                  startIcon={<DeviceHubIcon />}
+                {inputMethod !== 'api_usage' && (
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    size="large"
+                    fullWidth
+                    disabled={isPolling}
+                    startIcon={<DeviceHubIcon />}
+                  >
+                    {isPolling ? 'Classifying...' : 'Classify'}
+                  </Button>
+                )}
+              </Stack>
+            </Card>
+
+            {/* Footer with copyright */}
+            <Box
+              sx={{
+                mt: 4,
+                py: 2,
+                width: '100%',
+                backgroundColor: 'background.paper',
+                textAlign: 'center',
+              }}
+            >
+              <Typography variant="body2" color="textSecondary">
+                © {new Date().getFullYear()} Bar Meyuhas, Anat Bremler Barr, and Tal
+                Shapira
+              </Typography>
+              <Box sx={{ mt: 1 }}>
+                <IconButton
+                  component="a"
+                  href="https://github.com/your-profile"
+                  target="_blank"
+                  rel="noopener"
                 >
-                  {isPolling ? 'Classifying...' : 'Classify'}
-                </Button>
-              )}
-            </Stack>
-          </Card>
-
-          {/* Footer with copyright and icons */}
-          <Box
-            sx={{
-              mt: 4,
-              py: 2,
-              width: '100%',
-              backgroundColor: 'background.paper',
-              textAlign: 'center',
-            }}
-          >
-            <Typography variant="body2" color="textSecondary">
-              © {new Date().getFullYear()} Bar Meyuhas, Anat Bremler Barr, and Tal
-              Shapira
-            </Typography>
-            <Box sx={{ mt: 1 }}>
-              <IconButton
-                component="a"
-                href="https://github.com/your-profile"
-                target="_blank"
-                rel="noopener"
-              >
-                <GitHubIcon />
-              </IconButton>
-              <IconButton
-                component="a"
-                href="https://scholar.google.com/citations?user=xeWZouIAAAAJ&hl=en"
-                target="_blank"
-                rel="noopener"
-              >
-                <SchoolIcon />
-              </IconButton>
+                  <GitHubIcon />
+                </IconButton>
+                <IconButton
+                  component="a"
+                  href="https://scholar.google.com/citations?user=xeWZouIAAAAJ&hl=en"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  <SchoolIcon />
+                </IconButton>
+              </Box>
             </Box>
           </Box>
-        </Box>
-      </Container>
+        </Container>
+      </div>
     </ThemeProvider>
   );
 };
