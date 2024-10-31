@@ -65,6 +65,7 @@ const App = () => {
     function_classification: {},
   }); // Initialize with correct structure
   const [outputUrl, setOutputUrl] = useState(''); // State to store output_url
+  const [errorMessage, setErrorMessage] = useState(''); // New state variable for error messages
 
   // State for manual input fields
   const [manualInput, setManualInput] = useState({
@@ -108,6 +109,7 @@ const App = () => {
     setStatus(null); // Reset status
     setPollingMessage(''); // Reset polling message
     setOutputUrl(''); // Reset output URL
+    setErrorMessage(''); // Reset error message
     console.log('Input method changed to:', e.target.value);
   };
 
@@ -120,11 +122,13 @@ const App = () => {
       function_classification: {},
     }); // Clear previous JSON data
     setOutputUrl(''); // Clear output URL
+    setErrorMessage(''); // Reset error message
     console.log('Form submitted');
 
     // Basic validation
     if (!formData.apiKey) {
       console.log('Validation failed: Missing API key.');
+      setErrorMessage('API key is required.');
       setStatus('error');
       return;
     }
@@ -135,6 +139,7 @@ const App = () => {
       if (inputMethod === 'inference_json') {
         if (!formData.jsonInput) {
           console.log('Validation failed: JSON input is empty.');
+          setErrorMessage('JSON input is required.');
           setStatus('error');
           return;
         }
@@ -143,6 +148,7 @@ const App = () => {
           requestBody = parsed;
         } catch (err) {
           console.error('JSON parse error:', err);
+          setErrorMessage('Invalid JSON input.');
           setStatus('error');
           return;
         }
@@ -188,13 +194,18 @@ const App = () => {
 
         // Check if any fields other than mac_address are provided
         const fieldsProvided = Object.keys(deviceData).filter(
-          (key) => key !== 'mac_address' && deviceData[key] !== undefined
+          (key) =>
+            key !== 'mac_address' &&
+            deviceData[key] !== undefined &&
+            deviceData[key] !== '' &&
+            (Array.isArray(deviceData[key]) ? deviceData[key].length > 0 : true)
         );
 
         if (fieldsProvided.length === 0) {
           console.log(
             'Validation failed: No data provided in manual input besides MAC address.'
           );
+          setErrorMessage('Please provide at least one field besides MAC address.');
           setStatus('error');
           return;
         }
@@ -253,17 +264,25 @@ const App = () => {
         console.error('API response not OK. Status:', response.status);
         const errorText = await response.text();
         console.error('API Error Response:', errorText);
+
+        // Set error message based on status code
+        if (response.status === 401 || response.status === 403) {
+          setErrorMessage('Invalid API key. Please check your API key and try again.');
+        } else {
+          setErrorMessage('An error occurred while processing your request.');
+        }
         setStatus('error');
       }
     } catch (error) {
       console.error('Error during form submission:', error);
+      setErrorMessage('An unexpected error occurred. Please try again later.');
       setStatus('error');
     }
   };
 
   const startPolling = (url) => {
     setIsPolling(true); // Start polling
-    setPollingMessage('Waiting for classification process to end');
+    setPollingMessage('Waiting for classification process to complete');
     console.log('Polling started with URL:', url);
 
     const pollData = async () => {
@@ -298,7 +317,8 @@ const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <div className="app-background"> {/* Apply the background image class */}
+      <div className="app-background">
+        {/* Apply the background image class */}
         <AppBar position="static" sx={{ mb: 4 }}>
           <Toolbar>
             <DeviceHubIcon sx={{ mr: 1 }} />
@@ -309,8 +329,10 @@ const App = () => {
         </AppBar>
         <Container maxWidth="md">
           {/* Moved About Us and Academic Use sections to the top */}
-          <Box sx={{ width: '100%', mt: 4 }}            className="dark-bold-blue-text" // Apply the dark bold blue text class
->
+          <Box
+            sx={{ width: '100%', mt: 4 }}
+            className="dark-bold-blue-text" // Apply the dark bold blue text class
+          >
             <Typography
               variant="h6"
               gutterBottom
@@ -320,20 +342,19 @@ const App = () => {
               About Us
             </Typography>
             <Typography variant="body1" gutterBottom>
-              We at the research group <strong>Deepness Lab</strong> developed a
-              labeling system for unseen IoT devices. We aim to provide visibility
-              to the devices connected to your networks and reveal both the vendor
-              (e.g., Nest, Ring) and function (e.g., speaker, camera, vacuum
-              cleaner). We address the challenge of type labeling of an unseen IoT
-              device. We introduce a novel IoT labeling system, Zero-shot Engine
-              for IoT Asset Labeling (ZEAL).
+              We at the research group <strong>Deepness Lab</strong> developed a labeling
+              system for unseen IoT devices. We aim to provide visibility to the devices
+              connected to your networks and reveal both the vendor (e.g., Nest, Ring) and
+              function (e.g., speaker, camera, vacuum cleaner). We address the challenge
+              of type labeling of an unseen IoT device. We introduce a novel IoT labeling
+              system, Zero-shot Engine for IoT Asset Labeling (ZEAL).
               <br />
               To use this cloud-based system, you can reach out to us at{' '}
               <Link href="mailto:deepnesslab@tauex.tau.ac.il">
                 deepnesslab@tauex.tau.ac.il
               </Link>{' '}
-              to get access (API key) to the system. For more information and
-              research, visit our website:{' '}
+              to get access (API key) to the system. For more information and research,
+              visit our website:{' '}
               <Link
                 href="https://deepness-lab.org/publications/"
                 target="_blank"
@@ -352,8 +373,8 @@ const App = () => {
               Academic Use
             </Typography>
             <Typography variant="body1" gutterBottom>
-              Any use of the system for academic research is encouraged. We kindly
-              ask you to cite our paper:
+              Any use of the system for academic research is encouraged. We kindly ask you
+              to cite our paper:
             </Typography>
             <pre
               style={{
@@ -401,10 +422,9 @@ const App = () => {
                     Your message has been sent successfully!
                   </Alert>
                 )}
-              {status === 'error' && (
+              {status === 'error' && errorMessage && (
                 <Alert severity="error" sx={{ mb: 2 }}>
-                  There was an error processing your request. Please ensure you've
-                  provided at least one field besides MAC address.
+                  {errorMessage}
                 </Alert>
               )}
 
@@ -759,7 +779,7 @@ else:
               <Box sx={{ mt: 1 }}>
                 <IconButton
                   component="a"
-                  href="https://github.com/your-profile"
+                  href="https://github.com/barmey/NSDI_Labeling_system"
                   target="_blank"
                   rel="noopener"
                 >
