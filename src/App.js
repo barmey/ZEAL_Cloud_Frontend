@@ -57,7 +57,7 @@ const App = () => {
     jsonInput: '',
   });
   const [status, setStatus] = useState(null); // null, 'success', 'error'
-  const [inputMethod, setInputMethod] = useState('inference_api'); // 'inference_api', 'inference_json', 'api_usage'
+  const [inputMethod, setInputMethod] = useState('inference_json'); // 'inference_api', 'inference_json', 'api_usage'
   const [isPolling, setIsPolling] = useState(false); // Indicates if polling is in progress
   const [pollingMessage, setPollingMessage] = useState(''); // Message to display during polling
   const [jsonData, setJsonData] = useState({
