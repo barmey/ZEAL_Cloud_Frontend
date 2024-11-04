@@ -22,6 +22,7 @@ import {
   DeviceHub as DeviceHubIcon,
   VpnKey as VpnKeyIcon,
   Input as InputIcon,
+  Search as SearchIcon,
 } from '@mui/icons-material';
 import VendorCard from '../components/VendorCard';
 import JustificationCard from '../components/JustificationCard';
@@ -34,7 +35,16 @@ const ClassifyDevicePage = () => {
   // Form state
   const [formData, setFormData] = useState({
     apiKey: '',
-    jsonInput: '',
+    jsonInput: `{
+  "device id": {
+    "mac_address": "xx:xx:xx:xx:xx:xx",
+    "dhcp.option.hostname": ["hostname1", "hostname2"],
+    "dns.qry.name": ["example.com"],
+    "http.user_agent": ["UserAgentString"],
+    "dns.ptr.domain_name": ["ptr.example.com"],
+    "dhcp.option.vendor_class_id": ["class_id"]
+  }
+}` // Set the initial value to the example JSON
   });
   const [status, setStatus] = useState(null); // null, 'success', 'error'
   const [inputMethod, setInputMethod] = useState('inference_json'); // 'inference_api', 'inference_json', 'api_usage'
@@ -85,7 +95,16 @@ const ClassifyDevicePage = () => {
 
   const handleInputMethodChange = (e) => {
     setInputMethod(e.target.value);
-    setFormData({ ...formData, jsonInput: '' }); // Reset JSON input
+    setFormData({ ...formData, jsonInput: `{
+  "device id": {
+    "mac_address": "xx:xx:xx:xx:xx:xx",
+    "dhcp.option.hostname": ["hostname1", "hostname2"],
+    "dns.qry.name": ["example.com"],
+    "http.user_agent": ["UserAgentString"],
+    "dns.ptr.domain_name": ["ptr.example.com"],
+    "dhcp.option.vendor_class_id": ["class_id"]
+  }
+}` }); // Reset JSON input
     setManualInput({
       mac_address: '',
       'dhcp.option.hostname': '',
@@ -309,39 +328,21 @@ const ClassifyDevicePage = () => {
 
   return (
     <Box sx={{ backgroundColor: '#0D1B2A', color: '#fff', minHeight: '100vh' }}>
-      <Container maxWidth="lg" sx={{ py: 8 }}>
+      <Container maxWidth="lg" sx={{ py: 2 }}>
         {/* Heading and Description */}
-        <Grid container spacing={4} alignItems="center">
-          <Grid item xs={12} md={8}>
-            <Typography variant="h3" gutterBottom sx={{ fontWeight: 'bold' }}>
-              Labeling System
+        <Grid container spacing={2} alignItems="center">
+          <Grid item xs={12}>
+            <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold' }}>
+              IoT Device Labeling System
             </Typography>
-            <Typography variant="h5" gutterBottom>
-              Real-time IoT Device Labeling System
+            <Typography variant="body1" sx={{ mb: 2 }}>
+              Our system provides detection of devices, giving you insights into your network. Try it out:
             </Typography>
-            <Typography variant="body1" sx={{ mb: 4 }}>
-              Our system provides fast detection and automated verification to filter out
-              false labels, giving you accurate insights into your network devices.
-            </Typography>
-          </Grid>
-          <Grid item xs={12} md={4} sx={{ textAlign: 'right' }}>
-            <Button
-              variant="contained"
-              color="primary"
-              size="large"
-              onClick={() => navigate('/')}
-              sx={{
-                backgroundColor: '#1B9AAA',
-                '&:hover': { backgroundColor: '#128E9E' },
-              }}
-            >
-              API Key Request / Get Access
-            </Button>
           </Grid>
         </Grid>
 
         {/* Form and Results */}
-        <Box sx={{ mt: 6 }}>
+        <Box sx={{ mt: 2 }}>
           {status === 'error' && errorMessage && (
             <Alert severity="error" sx={{ mb: 2 }}>
               {errorMessage}
@@ -350,14 +351,14 @@ const ClassifyDevicePage = () => {
 
           <Card
             sx={{
-              p: 4,
+              p: 2,
               borderRadius: 2,
               boxShadow: 3,
               backgroundColor: '#1B263B',
               color: '#fff',
             }}
           >
-            <Grid container spacing={4}>
+            <Grid container spacing={2}>
               {/* Form Section */}
               <Grid item xs={12} md={6}>
                 <form onSubmit={handleSubmit}>
@@ -412,129 +413,116 @@ const ClassifyDevicePage = () => {
                     </FormControl>
 
                     {inputMethod === 'inference_api' && (
-                      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                      <Box>
                         <Typography
                           variant="subtitle1"
-                          sx={{ display: 'flex', alignItems: 'center' }}
+                          sx={{ display: 'flex', alignItems: 'center', mb: 1 }}
                         >
                           <DeviceHubIcon sx={{ mr: 1 }} />
                           Device Information:
                         </Typography>
-                        {/* Manual input fields with specific helperText */}
-                        <TextField
-                          label="MAC Address"
-                          name="mac_address"
-                          value={manualInput['mac_address']}
-                          onChange={handleManualInputChange}
-                          helperText="Example: AA:BB:CC:DD:EE:FF"
-                          fullWidth
-                          variant="outlined"
-                          color="primary"
-                          InputProps={{
-                            startAdornment: (
-                              <IconButton edge="start" disabled>
-                                <InputIcon />
-                              </IconButton>
-                            ),
-                            style: { color: '#fff' },
-                          }}
-                          sx={{ input: { color: '#fff' } }}
-                        />
-                        <TextField
-                          label="DHCP Hostname (comma-separated)"
-                          name="dhcp.option.hostname"
-                          value={manualInput['dhcp.option.hostname']}
-                          onChange={handleManualInputChange}
-                          helperText="Example: host1, host2"
-                          fullWidth
-                          variant="outlined"
-                          color="primary"
-                          InputProps={{
-                            startAdornment: (
-                              <IconButton edge="start" disabled>
-                                <InputIcon />
-                              </IconButton>
-                            ),
-                            style: { color: '#fff' },
-                          }}
-                          sx={{ input: { color: '#fff' } }}
-                        />
-                        <TextField
-                          label="Domains (comma-separated)"
-                          name="dns.qry.name"
-                          value={manualInput['dns.qry.name']}
-                          onChange={handleManualInputChange}
-                          helperText="Example: example.com, test.com"
-                          fullWidth
-                          variant="outlined"
-                          color="primary"
-                          InputProps={{
-                            startAdornment: (
-                              <IconButton edge="start" disabled>
-                                <InputIcon />
-                              </IconButton>
-                            ),
-                            style: { color: '#fff' },
-                          }}
-                          sx={{ input: { color: '#fff' } }}
-                        />
-                        <TextField
-                          label="HTTP User Agent"
-                          name="http.user_agent"
-                          value={manualInput['http.user_agent']}
-                          onChange={handleManualInputChange}
-                          helperText="Example: Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
-                          fullWidth
-                          variant="outlined"
-                          color="primary"
-                          InputProps={{
-                            startAdornment: (
-                              <IconButton edge="start" disabled>
-                                <InputIcon />
-                              </IconButton>
-                            ),
-                            style: { color: '#fff' },
-                          }}
-                          sx={{ input: { color: '#fff' } }}
-                        />
-                        <TextField
-                          label="DNS PTR (comma-separated)"
-                          name="dns.ptr.domain_name"
-                          value={manualInput['dns.ptr.domain_name']}
-                          onChange={handleManualInputChange}
-                          helperText="Example: ptr.example.com"
-                          fullWidth
-                          variant="outlined"
-                          color="primary"
-                          InputProps={{
-                            startAdornment: (
-                              <IconButton edge="start" disabled>
-                                <InputIcon />
-                              </IconButton>
-                            ),
-                            style: { color: '#fff' },
-                          }}
-                          sx={{ input: { color: '#fff' } }}
-                        />
-                        <TextField
-                          label="Vendor Class ID (comma-separated)"
-                          name="dhcp.option.vendor_class_id"
-                          value={manualInput['dhcp.option.vendor_class_id']}
-                          onChange={handleManualInputChange}
-                          helperText="Example: MSFT 5.0, MSFT 5.1"
-                          fullWidth
-                          variant="outlined"
-                          color="primary"
-                          InputProps={{
-                            startAdornment: (
-                              <IconButton edge="start" disabled>
-                                <InputIcon />
-                              </IconButton>
-                            ),
-                            style: { color: '#fff' },
-                          }}
-                          sx={{ input: { color: '#fff' } }}
-                        />
+                        {/* Arrange input fields in a grid */}
+                        <Grid container spacing={2}>
+                          {/* Row 1 */}
+                          <Grid item xs={12} sm={6}>
+                            <TextField
+                              label="MAC Address"
+                              name="mac_address"
+                              value={manualInput['mac_address']}
+                              onChange={handleManualInputChange}
+                              helperText="Example: AA:BB:CC:DD:EE:FF"
+                              fullWidth
+                              variant="outlined"
+                              color="primary"
+                              InputProps={{
+                                style: { color: '#fff' },
+                              }}
+                              sx={{ input: { color: '#fff' } }}
+                            />
+                          </Grid>
+                          <Grid item xs={12} sm={6}>
+                            <TextField
+                              label="HTTP User Agent"
+                              name="http.user_agent"
+                              value={manualInput['http.user_agent']}
+                              onChange={handleManualInputChange}
+                              helperText="Example: Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+                              fullWidth
+                              variant="outlined"
+                              color="primary"
+                              InputProps={{
+                                style: { color: '#fff' },
+                              }}
+                              sx={{ input: { color: '#fff' } }}
+                            />
+                          </Grid>
+                          {/* Row 2 */}
+                          <Grid item xs={12} sm={6}>
+                            <TextField
+                              label="DHCP Hostname (comma-separated)"
+                              name="dhcp.option.hostname"
+                              value={manualInput['dhcp.option.hostname']}
+                              onChange={handleManualInputChange}
+                              helperText="Example: host1, host2"
+                              fullWidth
+                              variant="outlined"
+                              color="primary"
+                              InputProps={{
+                                style: { color: '#fff' },
+                              }}
+                              sx={{ input: { color: '#fff' } }}
+                            />
+                          </Grid>
+                          <Grid item xs={12} sm={6}>
+                            <TextField
+                              label="Domains (comma-separated)"
+                              name="dns.qry.name"
+                              value={manualInput['dns.qry.name']}
+                              onChange={handleManualInputChange}
+                              helperText="Example: example.com, test.com"
+                              fullWidth
+                              variant="outlined"
+                              color="primary"
+                              InputProps={{
+                                style: { color: '#fff' },
+                              }}
+                              sx={{ input: { color: '#fff' } }}
+                            />
+                          </Grid>
+                          {/* Row 3 */}
+                          <Grid item xs={12} sm={6}>
+                            <TextField
+                              label="DNS PTR (comma-separated)"
+                              name="dns.ptr.domain_name"
+                              value={manualInput['dns.ptr.domain_name']}
+                              onChange={handleManualInputChange}
+                              helperText="Example: ptr.example.com"
+                              fullWidth
+                              variant="outlined"
+                              color="primary"
+                              InputProps={{
+                                style: { color: '#fff' },
+                              }}
+                              sx={{ input: { color: '#fff' } }}
+                            />
+                          </Grid>
+                          <Grid item xs={12} sm={6}>
+                            <TextField
+                              label="Vendor Class ID (comma-separated)"
+                              name="dhcp.option.vendor_class_id"
+                              value={manualInput['dhcp.option.vendor_class_id']}
+                              onChange={handleManualInputChange}
+                              helperText="Example: MSFT 5.0, MSFT 5.1"
+                              fullWidth
+                              variant="outlined"
+                              color="primary"
+                              InputProps={{
+                                style: { color: '#fff' },
+                              }}
+                              sx={{ input: { color: '#fff' } }}
+                            />
+                          </Grid>
+                        </Grid>
                       </Box>
                     )}
 
@@ -542,33 +530,11 @@ const ClassifyDevicePage = () => {
                       <>
                         <Typography
                           variant="subtitle1"
-                          sx={{ display: 'flex', alignItems: 'center' }}
+                          sx={{ display: 'flex', alignItems: 'center', mb: 1 }}
                         >
                           <InputIcon sx={{ mr: 1 }} />
-                          Paste JSON Here:
+                          Enter JSON Input:
                         </Typography>
-                        {/* Display the JSON example */}
-                        <pre
-                          style={{
-                            backgroundColor: '#415A77',
-                            padding: '10px',
-                            borderRadius: '8px',
-                            overflowX: 'auto',
-                            marginBottom: '16px',
-                            color: '#E0E1DD',
-                          }}
-                        >
-                          {`{
-  "device id": {
-    "mac_address": "xx:xx:xx:xx:xx:xx",
-    "dhcp.option.hostname": ["hostname1", "hostname2"],
-    "dns.qry.name": ["example.com"],
-    "http.user_agent": "UserAgentString",
-    "dns.ptr.domain_name": ["ptr.example.com"],
-    "dhcp.option.vendor_class_id": ["class_id"]
-  }
-}`}
-                        </pre>
                         <TextField
                           label="JSON Input"
                           name="jsonInput"
@@ -579,22 +545,12 @@ const ClassifyDevicePage = () => {
                           fullWidth
                           variant="outlined"
                           color="primary"
-                          placeholder={`{
-  "device id": {
-    "mac_address": "xx:xx:xx:xx:xx:xx",
-    "dhcp.option.hostname": ["hostname1", "hostname2"],
-    "dns.qry.name": ["example.com"],
-    "http.user_agent": "UserAgentString",
-    "dns.ptr.domain_name": ["ptr.example.com"],
-    "dhcp.option.vendor_class_id": ["class_id"]
-  }
-}`}
-                          helperText="Example JSON structure is shown in the placeholder above."
+                          helperText="Modify the example JSON as needed."
                           InputProps={{
-                            style: { color: '#fff' },
+                            style: { color: '#fff', fontFamily: 'monospace' },
                           }}
                           sx={{
-                            textarea: { color: '#fff' },
+                            textarea: { color: '#fff', fontFamily: 'monospace' },
                           }}
                         />
                       </>
@@ -703,7 +659,7 @@ else:
                   jsonData.function_classification.label && (
                     <Box>
                       <Typography variant="h6" gutterBottom>
-                        Classification Results:
+                        Labeling Results:
                       </Typography>
                       <VendorCard
                         vendorClassification={jsonData.vendor_classification}
@@ -720,15 +676,42 @@ else:
 
                 {/* Display output_url elegantly */}
                 {outputUrl && (
-                  <Alert severity="info" sx={{ mt: 2, backgroundColor: '#415A77', color: '#E0E1DD' }}>
-                    <Typography variant="subtitle1" >
-                      When results are ready, you can view them here:{' '}
+                  <Alert
+                    severity="info"
+                    sx={{ mt: 2, backgroundColor: '#415A77', color: '#E0E1DD' }}
+                  >
+                    <Typography variant="subtitle1">
+                      When results are ready, you can view them here:
                     </Typography>
                     <Link href={outputUrl} target="_blank" rel="noopener" color="secondary">
                       View Results
                     </Link>
                   </Alert>
                 )}
+
+                {/* Display placeholder content when no other content is present */}
+                {!isPolling &&
+                  status !== 'success' &&
+                  !outputUrl &&
+                  inputMethod !== 'api_usage' && (
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        mt: 4,
+                      }}
+                    >
+                      <SearchIcon sx={{ fontSize: 80, color: '#1B9AAA' ,mt:16}} />
+                      <Typography variant="h6" sx={{ mt: 2, textAlign: 'center' }}>
+                        Ready to classify your IoT device?
+                      </Typography>
+                      <Typography variant="body1" sx={{ mt: 1, textAlign: 'center' }}>
+                        Enter the device information on the left and click "Classify" to get
+                        started.
+                      </Typography>
+                    </Box>
+                  )}
               </Grid>
             </Grid>
           </Card>

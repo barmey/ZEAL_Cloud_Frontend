@@ -28,7 +28,7 @@ const AboutUsPage = () => {
   });
   const [formStatus, setFormStatus] = useState(null);
 
-  const [isZoomed, setIsZoomed] = useState(false); // Added state for image zoom
+  const [isZoomed, setIsZoomed] = useState(false); // State for image zoom
 
   const handleFormChange = (e) => {
     const { name, value } = e.target;
@@ -50,10 +50,10 @@ const AboutUsPage = () => {
   };
 
   return (
-    <Box sx={{ backgroundColor: '#0D1B2A', color: '#fff', minHeight: '100vh' }}>
+    <Box sx={{ backgroundColor: '#0D1B2A', color: '#fff' }}>
       {/* Hero Section */}
-      <Container maxWidth="lg" sx={{ py: 4 }}>
-        <Grid container spacing={4} alignItems="center">
+      <Container maxWidth="lg" sx={{ py: 3 }}>
+        <Grid container spacing={4} alignItems="flex-start">
           {/* Text Section */}
           <Grid item xs={12} md={6}>
             <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold' }}>
@@ -62,27 +62,65 @@ const AboutUsPage = () => {
             <Typography variant="h4" gutterBottom>
               See ZEAL in Action
             </Typography>
-            <Typography variant="body1" sx={{ mb: 4 }}>
+            <Typography variant="body1" sx={{ mb: 2 }}>
               Experience visibility into your network devices with ZEAL. Our
               system provides insights into both the vendor and function of devices connected to your network, ensuring security and operational efficiency.
             </Typography>
-            {/* Image Section - Placed inside the Text Section */}
+            {/* Image Section with Hover Effect */}
             <Box
-              component="img"
-              src={zeal_platform} // Replace with your image path
-              alt="ZEAL Platform"
-              onClick={() => setIsZoomed(true)} // Click to zoom in
               sx={{
+                position: 'relative',
                 width: '100%',
                 maxWidth: '500px',
-                borderRadius: 2,
-                border: '2px solid #415A77',
-                boxShadow: '0 4px 20px rgba(0, 0, 0, 0.5)',
-                opacity: 0.9,
                 mt: 2,
-                cursor: 'zoom-in', // Cursor indicates zoom-in
+                cursor: 'zoom-in',
+                '&:hover .hoverOverlay': {
+                  opacity: 1,
+                },
               }}
-            />
+              onClick={() => setIsZoomed(true)} // Click to zoom in
+            >
+              <Box
+                component="img"
+                src={zeal_platform} // Replace with your image path
+                alt="ZEAL Platform"
+                sx={{
+                  width: '100%',
+                  borderRadius: 2,
+                  border: '2px solid #415A77',
+                  boxShadow: '0 4px 20px rgba(0, 0, 0, 0.5)',
+                  opacity: 0.9,
+                  transition: 'transform 0.3s, box-shadow 0.3s, opacity 0.3s',
+                  '&:hover': {
+                    transform: 'scale(1.02)',
+                    boxShadow: '0 6px 25px rgba(0, 0, 0, 0.6)',
+                    opacity: 1,
+                  },
+                }}
+              />
+              <Box
+                className="hoverOverlay"
+                sx={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  color: '#fff',
+                  backgroundColor: 'rgba(0, 0, 0, 0.4)',
+                  opacity: 0,
+                  transition: 'opacity 0.3s',
+                  borderRadius: 2,
+                }}
+              >
+                <Typography variant="h6" sx={{ textAlign: 'center' }}>
+                  Click to Zoom
+                </Typography>
+              </Box>
+            </Box>
             {/* Zoomed Image Overlay */}
             {isZoomed && (
               <Box
@@ -115,7 +153,7 @@ const AboutUsPage = () => {
               </Box>
             )}
           </Grid>
-          {/* Contact Form Section */}
+          {/* Contact Form and Testimonial Section */}
           <Grid item xs={12} md={6}>
             <Box sx={{ backgroundColor: '#1B263B', p: 4, borderRadius: 2 }}>
               <Typography variant="h5" gutterBottom>
@@ -213,42 +251,35 @@ const AboutUsPage = () => {
                         '&:hover': { backgroundColor: '#128E9E' },
                       }}
                     >
-                      Request Demo
+                      <b>Request Demo Access</b>
                     </Button>
                   </Grid>
                 </Grid>
               </form>
             </Box>
+            {/* Testimonial Section */}
+            <Box sx={{ mt: 4, borderLeft: '4px solid #ff9900', pl: 2, ml: 1 }}>
+              <Typography variant="h6" sx={{ fontStyle: 'italic', color: '#E0E1DD' }}>
+              "ZEAL transformed our visibility and security of the devices on our network"
+              </Typography>
+              <Typography variant="subtitle1" sx={{ mt: 1, color: '#E0E1DD' }}>
+                — Industry Expert
+              </Typography>
+            </Box>
           </Grid>
         </Grid>
       </Container>
-
-      {/* Testimonial Section */}
-      <Box sx={{ py: 4 }}>
-        <Container maxWidth="md">
-          <Typography
-            variant="h5"
-            sx={{ fontStyle: 'italic', textAlign: 'center', mb: 2 }}
-          >
-            "ZEAL transformed our understanding of the devices on our network.
-            Unprecedented visibility and security."
-          </Typography>
-          <Typography variant="subtitle1" sx={{ textAlign: 'center' }}>
-            — Industry Expert
-          </Typography>
-        </Container>
-      </Box>
 
       {/* Footer */}
       <Box sx={{ backgroundColor: '#0D1B2A', py: 2 }}>
         <Container maxWidth="lg">
           <Grid container spacing={4}>
             {/* About Us */}
-            <Grid item xs={12} md={6}>
-              <Typography variant="h6" gutterBottom>
+            <Grid item xs={12} md={6} >
+              <Typography variant="h6" sx={{borderLeft: '4px solid #ff9900', borderLeft: '4px solid #ff9900', pl: 2}} gutterBottom>
                 About ZEAL
               </Typography>
-              <Typography variant="body2" sx={{ color: '#E0E1DD' }}>
+              <Typography variant="body2" sx={{ color: '#E0E1DD',textAlign:'justify' }}>
                 Developed by the research group <strong>Deepness Lab</strong>, ZEAL
                 provides a cutting-edge labeling system for unseen IoT devices. Our
                 mission is to offer unparalleled visibility into network-connected
@@ -257,8 +288,8 @@ const AboutUsPage = () => {
               </Typography>
             </Grid>
             {/* Social Links */}
-            <Grid item xs={12} md={6}>
-              <Typography variant="h6" gutterBottom>
+            <Grid item xs={14} md={5}>
+              <Typography variant="h6"  gutterBottom>
                 Connect with Us
               </Typography>
               <Box sx={{ display: 'flex', gap: 2 }}>
@@ -267,7 +298,7 @@ const AboutUsPage = () => {
                   href="https://github.com/barmey/NSDI_Labeling_system"
                   target="_blank"
                   rel="noopener"
-                  sx={{ color: '#fff' }}
+                  sx={{ color: '#fff'}}
                 >
                   <GitHubIcon />
                 </IconButton>
