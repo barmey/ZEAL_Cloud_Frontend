@@ -6,6 +6,12 @@ import reportWebVitals from './reportWebVitals';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline'; // Optional: Normalize styles
 import theme from './theme'; // Import your custom theme
+// src/index.js
+
+import { Amplify } from 'aws-amplify';
+import awsExports from './aws-exports'; // Make sure this file exists with your Amplify config
+
+Amplify.configure(awsExports);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

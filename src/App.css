@@ -107,3 +107,45 @@ input:focus, textarea:focus, select:focus {
   width: 100%;
   max-width: 500px;
 }
+
+/* src/App.css */
+
+/* High-tech design enhancements */
+body {
+  background-color: #0a0a0a;
+  color: #f0f0f0;
+}
+
+.AppBar {
+  background-color: #1f1f1f;
+}
+
+button {
+  background-color: #1976d2;
+  color: #fff;
+}
+
+button:hover {
+  background-color: #115293;
+}
+
+/* Input fields */
+.MuiInputBase-input,
+.MuiFormLabel-root {
+  color: #fff;
+}
+
+/* Placeholder text */
+.MuiInputBase-input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Radio buttons */
+.MuiRadio-root {
+  color: #fff;
+}
+
+/* Card background */
+.MuiPaper-root {
+  background-color: #1e1e1e !important;
+}

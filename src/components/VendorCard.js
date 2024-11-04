@@ -1,41 +1,35 @@
 // src/components/VendorCard.js
+
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardContent, Avatar, Typography, Stack, Box } from '@mui/material';
-import { getFunctionIcon } from '../utils/iconMapping';
-
-// Define a Set for predefined vendor labels for efficient lookup
-const predefinedVendors = new Set([
-  "apple",
-  "panasonic",
-  "msi",
-  "google",
-  "chromebook",
-  "oppo",
-  "poco",
-  "redmi",
-  "roku"
-]);
 
 const VendorCard = ({ vendorClassification, functionClassification }) => {
   const label = vendorClassification.label.toLowerCase();
-  const isPredefined = predefinedVendors.has(label);
+  const functionLabel = functionClassification.label.toLowerCase();
 
-  // Determine the source URL based on the vendor classification
-  const avatarSrc = isPredefined
-    ? `https://img.logo.dev/${label}.com?token=pk_MJLPtkW9ToSWXPNdIBNy6w` // Replace with your alternative logo API URL
-    : `https://img.logo.dev/${label}.com?token=pk_MJLPtkW9ToSWXPNdIBNy6w`;
+  // Determine the source URL for vendor icon based on classification label
+  const avatarSrc = `https://img.logo.dev/${label}.com?token=pk_MJLPtkW9ToSWXPNdIBNy6w`;
 
-  // Optional: State to handle fallback image if the primary src fails to load
+  // Set a specific default image for "unknown" function
+  const functionIconSrc = functionLabel === "unknown"
+    ? '/path/to/unknown_function_icon.png' // Replace with your "unknown" function icon path
+    : `https://img.logo.dev/${functionLabel}.com?token=pk_MJLPtkW9ToSWXPNdIBNy6w`;
+
+  // State to handle fallback images if the primary sources fail to load
   const [imgSrc, setImgSrc] = useState(avatarSrc);
+  const [functionIcon, setFunctionIcon] = useState(functionIconSrc);
 
   const handleImageError = () => {
-    // Set to a default fallback image if the logo fails to load
-    setImgSrc('/path/to/default/avatar.png'); // Replace with your fallback image path
+    setImgSrc('/path/to/default/avatar.png'); // Replace with your fallback vendor image path
+  };
+
+  const handleFunctionIconError = () => {
+    setFunctionIcon('/path/to/default/function_icon.png'); // Replace with your fallback function icon path
   };
 
   return (
-    <Card sx={{ p: 2, mb: 2 }}>
+    <Card sx={{ p: 2, mb: 2, backgroundColor: '#415A77', color: '#E0E1DD' }}>
       <Stack direction="row" spacing={2} alignItems="center">
         <Avatar
           src={imgSrc}
@@ -44,21 +38,30 @@ const VendorCard = ({ vendorClassification, functionClassification }) => {
           imgProps={{ onError: handleImageError }}
         />
         <Box>
-          <Typography variant="h6">{vendorClassification.label}</Typography>
-          <Typography variant="body2" color="text.secondary">
-            Confidence: {vendorClassification.confidence}
+          <Typography variant="h6" sx={{ color: '#E0E1DD' }}>
+            {vendorClassification.label}
+          </Typography>
+          <Typography variant="body2" sx={{ color: '#E0E1DD' }}>
+            Confidence: {Math.round(vendorClassification.confidence * 100)}%
           </Typography>
         </Box>
       </Stack>
       <CardContent>
         <Stack direction="row" spacing={2} alignItems="center">
-          {getFunctionIcon(functionClassification.label)}
+          <Avatar
+            src={functionIcon}
+            alt={functionClassification.label}
+            sx={{ width: 50, height: 50 }}
+            imgProps={{ onError: handleFunctionIconError }}
+          />
           <Box>
-            <Typography variant="h6">{functionClassification.label}</Typography>
-            <Typography variant="body2" color="text.secondary">
-              Confidence: {functionClassification.confidence}
+            <Typography variant="h6" sx={{ color: '#E0E1DD' }}>
+              {functionClassification.label}
             </Typography>
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body2" sx={{ color: '#E0E1DD' }}>
+              Confidence: {Math.round(functionClassification.confidence * 100)}%
+            </Typography>
+            <Typography variant="body2" sx={{ color: '#E0E1DD' }}>
               {functionClassification.justification}
             </Typography>
           </Box>
