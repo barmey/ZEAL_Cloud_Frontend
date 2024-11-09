@@ -1,6 +1,6 @@
 // src/pages/AboutUsPage.js
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Box,
   Typography,
@@ -15,6 +15,7 @@ import {
   Twitter as TwitterIcon,
   GitHub as GitHubIcon,
 } from '@mui/icons-material';
+import { useLocation } from 'react-router-dom'; // Import useLocation
 
 import zeal_platform from '../assets/zeal_platform.png'; // Adjust the path as per your project structure
 
@@ -49,6 +50,19 @@ const AboutUsPage = () => {
     });
   };
 
+  const location = useLocation(); // Get the current location
+  const contactFormRef = useRef(null); // Reference to the contact form
+  const [highlight, setHighlight] = useState(false); // State to manage highlight
+
+  useEffect(() => {
+    if (location.hash === '#contact-form') {
+      setHighlight(true);
+      // Reset highlight after 3 seconds
+      const timer = setTimeout(() => setHighlight(false), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [location.hash]);
+
   return (
     <Box sx={{ backgroundColor: '#0D1B2A', color: '#fff' }}>
       {/* Hero Section */}
@@ -62,7 +76,10 @@ const AboutUsPage = () => {
             <Typography variant="h4" gutterBottom>
               See ZEAL in Action
             </Typography>
-            <Typography variant="body1" sx={{ mb: 2, textAlign: 'justify', textIndent: '2em' }}>
+            <Typography
+              variant="body1"
+              sx={{ mb: 2, textAlign: 'justify', textIndent: '2em' }}
+            >
               Experience visibility into your network devices with ZEAL. Our
               system provides insights into both the vendor and function of devices connected to your network, ensuring security and operational efficiency.
             </Typography>
@@ -156,8 +173,19 @@ const AboutUsPage = () => {
           {/* Contact Form and Testimonial Section */}
           <Grid item xs={12} md={6}>
             <Box
-              id="contact-form" // Added ID for direct linking
-              sx={{ backgroundColor: '#1B263B', p: 4, borderRadius: 2 }}
+              id="contact-form" // Already assigned ID for direct linking
+              ref={contactFormRef} // Assign ref to the contact form
+              sx={{
+                backgroundColor: '#1B263B',
+                p: 4,
+                borderRadius: 2,
+                // Conditional styling for highlight effect
+                boxShadow: highlight
+                  ? '0 0 20px 5px rgba(255, 153, 0, 0.7)'
+                  : 'none',
+                borderLeft: highlight ? '4px solid #ff9900' : '4px solid #1B263B',
+                transition: 'box-shadow 0.5s, border-left 0.5s',
+              }}
             >
               <Typography variant="h5" gutterBottom>
                 Get Early Access to ZEAL
@@ -263,10 +291,10 @@ const AboutUsPage = () => {
             {/* Testimonial Section */}
             <Box sx={{ mt: 4, borderLeft: '4px solid #ff9900', pl: 2, ml: 1 }}>
               <Typography variant="h6" sx={{ fontStyle: 'italic', color: '#E0E1DD' }}>
-              "ZEAL transformed our visibility and security of the devices on our network"
+              "ZEAL transformed our visibility and security of the devices on our network"              
               </Typography>
               <Typography variant="subtitle1" sx={{ mt: 1, color: '#E0E1DD' }}>
-                — Industry Expert
+              — Industry Expert
               </Typography>
             </Box>
           </Grid>

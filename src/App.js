@@ -9,6 +9,16 @@ import ClassifyDevicePage from './pages/ClassifyDevicePage';
 import logo from './assets/logo.png'; // Adjust the path as per your project structure
 
 const App = () => {
+  const handleApiAccessRequestClick = (e) => {
+    e.preventDefault();
+    // Reset the hash to allow re-triggering the useEffect in AboutUsPage
+    window.location.hash = '';
+    // After a short delay, set the hash to '#contact-form'
+    setTimeout(() => {
+      window.location.hash = '#contact-form';
+    }, 100); // 100ms delay
+  };
+
   return (
     <Router>
       <Box sx={{ minHeight: '100vh', backgroundColor: '#0A2342' }}>
@@ -24,13 +34,24 @@ const App = () => {
               />
             </HashLink>
             <Box sx={{ flexGrow: 1 }} />
-            {/* Updated API / Access Request link to scroll to contact form */}
+            {/* Updated API / Access Request link with onClick handler */}
             <HashLink
               smooth
-              to="/#contact-form" // Link to the contact form section
+              to="/#contact-form"
               style={{ textDecoration: 'none', color: '#fff', marginRight: '16px' }}
+              onClick={handleApiAccessRequestClick}
             >
-              <Typography variant="h6" sx={{ fontSize: '1rem', transition: 'color 0.3s', '&:hover': { color: '#ff9900', textDecoration: 'underline' } }}>
+              <Typography
+                variant="h6"
+                sx={{
+                  fontSize: '1rem',
+                  transition: 'color 0.3s',
+                  '&:hover': {
+                    color: '#ff9900',
+                    textDecoration: 'underline',
+                  },
+                }}
+              >
                 API / Access Request
               </Typography>
             </HashLink>
