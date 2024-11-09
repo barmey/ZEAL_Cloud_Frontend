@@ -28,6 +28,7 @@
     "react-json-pretty": "^2.2.0",
     "react-lottie": "^1.2.4",
     "react-router-dom": "^6.27.0",
+    "react-router-hash-link": "^2.4.3",
     "react-scripts": "5.0.1",
     "svgr": "^1.10.0",
     "web-vitals": "^2.1.4"
