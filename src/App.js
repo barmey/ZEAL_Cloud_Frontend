@@ -1,8 +1,9 @@
 // src/App.js
 
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import { AppBar, Toolbar, Button, Box, Typography, Link as MuiLink } from '@mui/material';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AppBar, Toolbar, Button, Box, Typography } from '@mui/material';
+import { HashLink } from 'react-router-hash-link'; // Import HashLink
 import AboutUsPage from './pages/AboutUsPage';
 import ClassifyDevicePage from './pages/ClassifyDevicePage';
 import logo from './assets/logo.png'; // Adjust the path as per your project structure
@@ -14,35 +15,29 @@ const App = () => {
         <AppBar position="static" sx={{ backgroundColor: '#0A2342' }}>
           <Toolbar sx={{ p: 0 }}>
             {/* Logo is now a clickable link to the About Us page */}
-            <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <HashLink to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
               <Box
                 component="img"
                 src={logo}
                 alt="System Logo"
                 sx={{ height: 80, mr: 2, cursor: 'pointer' }}
               />
-            </Link>
+            </HashLink>
             <Box sx={{ flexGrow: 1 }} />
-            {/* Updated API / Access Request link */}
-            <MuiLink
-              component={Link}
-              to="/"
-              sx={{
-                textDecoration: 'none',
-                color: '#fff',
-                marginRight: '16px',
-                fontSize: '1rem',
-                '&:hover': {
-                  color: '#ff9900', // Change text color on hover
-                  textDecoration: 'underline', // Optional underline on hover
-                },
-              }}
+            {/* Updated API / Access Request link to scroll to contact form */}
+            <HashLink
+              smooth
+              to="/#contact-form" // Link to the contact form section
+              style={{ textDecoration: 'none', color: '#fff', marginRight: '16px' }}
             >
-              API / Access Request
-            </MuiLink>
+              <Typography variant="h6" sx={{ fontSize: '1rem', transition: 'color 0.3s', '&:hover': { color: '#ff9900', textDecoration: 'underline' } }}>
+                API / Access Request
+              </Typography>
+            </HashLink>
             {/* Enhanced the Classify Device button */}
             <Button
-              component={Link}
+              component={HashLink}
+              smooth
               to="/classify"
               variant="contained"
               color="primary"
