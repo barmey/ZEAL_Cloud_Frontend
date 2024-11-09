@@ -263,10 +263,10 @@ const AboutUsPage = () => {
             {/* Testimonial Section */}
             <Box sx={{ mt: 4, borderLeft: '4px solid #ff9900', pl: 2, ml: 1 }}>
               <Typography variant="h6" sx={{ fontStyle: 'italic', color: '#E0E1DD' }}>
-                “Orca adds value practically from the first day of use. With other tools, we wait months to see value coming from them.”
+              "ZEAL transformed our visibility and security of the devices on our network"
               </Typography>
               <Typography variant="subtitle1" sx={{ mt: 1, color: '#E0E1DD' }}>
-                — Vivek Menon, VP and CISO, Digital Turbine
+                — Industry Expert
               </Typography>
             </Box>
           </Grid>
