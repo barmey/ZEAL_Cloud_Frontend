@@ -62,7 +62,7 @@ const AboutUsPage = () => {
             <Typography variant="h4" gutterBottom>
               See ZEAL in Action
             </Typography>
-            <Typography variant="body1" sx={{ mb: 2 }}>
+            <Typography variant="body1" sx={{ mb: 2, textAlign: 'justify', textIndent: '2em' }}>
               Experience visibility into your network devices with ZEAL. Our
               system provides insights into both the vendor and function of devices connected to your network, ensuring security and operational efficiency.
             </Typography>
@@ -155,7 +155,10 @@ const AboutUsPage = () => {
           </Grid>
           {/* Contact Form and Testimonial Section */}
           <Grid item xs={12} md={6}>
-            <Box sx={{ backgroundColor: '#1B263B', p: 4, borderRadius: 2 }}>
+            <Box
+              id="contact-form" // Added ID for direct linking
+              sx={{ backgroundColor: '#1B263B', p: 4, borderRadius: 2 }}
+            >
               <Typography variant="h5" gutterBottom>
                 Get Early Access to ZEAL
               </Typography>
@@ -260,10 +263,10 @@ const AboutUsPage = () => {
             {/* Testimonial Section */}
             <Box sx={{ mt: 4, borderLeft: '4px solid #ff9900', pl: 2, ml: 1 }}>
               <Typography variant="h6" sx={{ fontStyle: 'italic', color: '#E0E1DD' }}>
-              "ZEAL transformed our visibility and security of the devices on our network"
+                “Orca adds value practically from the first day of use. With other tools, we wait months to see value coming from them.”
               </Typography>
               <Typography variant="subtitle1" sx={{ mt: 1, color: '#E0E1DD' }}>
-                — Industry Expert
+                — Vivek Menon, VP and CISO, Digital Turbine
               </Typography>
             </Box>
           </Grid>
@@ -275,11 +278,26 @@ const AboutUsPage = () => {
         <Container maxWidth="lg">
           <Grid container spacing={4}>
             {/* About Us */}
-            <Grid item xs={12} md={6} >
-              <Typography variant="h6" sx={{borderLeft: '4px solid #ff9900', borderLeft: '4px solid #ff9900', pl: 2}} gutterBottom>
+            <Grid item xs={12} md={6}>
+              <Typography
+                variant="h6"
+                sx={{
+                  borderLeft: '4px solid #ff9900',
+                  pl: 2,
+                  mb: 2,
+                }}
+                gutterBottom
+              >
                 About ZEAL
               </Typography>
-              <Typography variant="body2" sx={{ color: '#E0E1DD',textAlign:'justify' }}>
+              <Typography
+                variant="body2"
+                sx={{
+                  color: '#E0E1DD',
+                  textAlign: 'justify',
+                  textIndent: '2em',
+                }}
+              >
                 Developed by the research group <strong>Deepness Lab</strong>, ZEAL
                 provides a cutting-edge labeling system for unseen IoT devices. Our
                 mission is to offer unparalleled visibility into network-connected
@@ -288,8 +306,8 @@ const AboutUsPage = () => {
               </Typography>
             </Grid>
             {/* Social Links */}
-            <Grid item xs={14} md={5}>
-              <Typography variant="h6"  gutterBottom>
+            <Grid item xs={12} md={6}>
+              <Typography variant="h6" gutterBottom>
                 Connect with Us
               </Typography>
               <Box sx={{ display: 'flex', gap: 2 }}>
@@ -298,7 +316,7 @@ const AboutUsPage = () => {
                   href="https://github.com/barmey/NSDI_Labeling_system"
                   target="_blank"
                   rel="noopener"
-                  sx={{ color: '#fff'}}
+                  sx={{ color: '#fff' }}
                 >
                   <GitHubIcon />
                 </IconButton>
