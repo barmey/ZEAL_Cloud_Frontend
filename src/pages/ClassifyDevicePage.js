@@ -340,6 +340,22 @@ const ClassifyDevicePage = () => {
             </Typography>
           </Grid>
         </Grid>
+      {/* New Section: Display Device Category if available */}
+      {jsonData.mock_data && (
+        <Box
+          sx={{
+            mb: 2,
+            p: 2,
+            backgroundColor: '#1B263B',
+            borderRadius: 2,
+            textAlign: 'center'
+          }}
+        >
+          <Typography variant="h6" color="secondary">
+            Device Category: {jsonData.mock_data}
+          </Typography>
+        </Box>
+      )}
 
         {/* Form and Results */}
         <Box sx={{ mt: 2 }}>
