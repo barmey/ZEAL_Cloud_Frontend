@@ -263,7 +263,7 @@ const ClassifyDevicePage = () => {
           // Save the output_url
           setOutputUrl(parsedBody.output_url);
           // Start polling with the provided output_url
-          startPolling(parsedBody.output_url);
+          startPolling(parsedBody.output_url, parsedBody.mock_data);
         } else {
           console.log(
             'No output_url found in API response. Setting status to success.'
@@ -291,40 +291,41 @@ const ClassifyDevicePage = () => {
     }
   };
 
-  const startPolling = (url) => {
-    setIsPolling(true); // Start polling
-    setPollingMessage('Waiting for classification process to complete');
-    console.log('Polling started with URL:', url);
+  const startPolling = (url, initialMockData) => {
+  setIsPolling(true); // Start polling
+  setPollingMessage('Waiting for classification process to complete');
+  console.log('Polling started with URL:', url);
 
-    const pollData = async () => {
-      console.log(`Polling for URL: ${url}`);
+  const pollData = async () => {
+    console.log(`Polling for URL: ${url}`);
 
-      try {
-        const linkResponse = await fetch(url);
-        console.log('Polling response status:', linkResponse.status);
+    try {
+      const linkResponse = await fetch(url);
+      console.log('Polling response status:', linkResponse.status);
 
-        if (linkResponse.ok) {
-          const linkData = await linkResponse.json(); // Assuming JSON
-          console.log('Successfully fetched JSON data:', linkData);
-          setJsonData(linkData); // Store fetched JSON data
-          setStatus('success');
-          setIsPolling(false); // Stop polling
-          setPollingMessage('Results fetched successfully!');
-        } else {
-          console.warn(
-            `Polling attempt failed with status ${linkResponse.status}. Retrying in 5 seconds.`
-          );
-          setTimeout(pollData, 5000); // Retry after 5 seconds
-        }
-      } catch (error) {
-        console.error('Error during polling:', error);
-        console.warn('Retrying in 5 seconds.');
+      if (linkResponse.ok) {
+        const linkData = await linkResponse.json(); // Assuming JSON from file
+        console.log('Successfully fetched JSON data:', linkData);
+        // Merge the mock data from the initial response with the polled data
+        setJsonData({ ...linkData, mock_data: initialMockData });
+        setStatus('success');
+        setIsPolling(false); // Stop polling
+        setPollingMessage('Results fetched successfully!');
+      } else {
+        console.warn(
+          `Polling attempt failed with status ${linkResponse.status}. Retrying in 5 seconds.`
+        );
         setTimeout(pollData, 5000); // Retry after 5 seconds
       }
-    };
-
-    pollData(); // Initiate the first polling attempt
+    } catch (error) {
+      console.error('Error during polling:', error);
+      console.warn('Retrying in 5 seconds.');
+      setTimeout(pollData, 5000); // Retry after 5 seconds
+    }
   };
+
+  pollData(); // Initiate the first polling attempt
+};
 
   return (
     <Box sx={{ backgroundColor: '#0D1B2A', color: '#fff', minHeight: '100vh' }}>
