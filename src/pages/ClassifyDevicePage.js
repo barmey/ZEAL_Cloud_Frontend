@@ -292,41 +292,38 @@ const ClassifyDevicePage = () => {
   };
 
   const startPolling = (url, initialMockData) => {
-  setIsPolling(true); // Start polling
+  setIsPolling(true);
   setPollingMessage('Waiting for classification process to complete');
   console.log('Polling started with URL:', url);
 
   const pollData = async () => {
-    console.log(`Polling for URL: ${url}`);
-
     try {
       const linkResponse = await fetch(url);
-      console.log('Polling response status:', linkResponse.status);
-
       if (linkResponse.ok) {
-        const linkData = await linkResponse.json(); // Assuming JSON from file
-        console.log('Successfully fetched JSON data:', linkData);
-        // Merge the mock data from the initial response with the polled data
-        setJsonData({ ...linkData, mock_data: initialMockData });
-        setStatus('success');
-        setIsPolling(false); // Stop polling
-        setPollingMessage('Results fetched successfully!');
+        const linkData = await linkResponse.json();
+        // Merge initial mock_data if not present (if needed)
+        const mergedData = { ...linkData };
+        if (!mergedData.mock_data && initialMockData) {
+          mergedData.mock_data = initialMockData;
+        }
+        setJsonData(mergedData);
+        if (mergedData.final) {
+          setStatus('success');
+          setIsPolling(false);
+          setPollingMessage('Results fetched successfully!');
+        } else {
+          setTimeout(pollData, 5000);
+        }
       } else {
-        console.warn(
-          `Polling attempt failed with status ${linkResponse.status}. Retrying in 5 seconds.`
-        );
-        setTimeout(pollData, 5000); // Retry after 5 seconds
+        setTimeout(pollData, 5000);
       }
     } catch (error) {
-      console.error('Error during polling:', error);
-      console.warn('Retrying in 5 seconds.');
-      setTimeout(pollData, 5000); // Retry after 5 seconds
+      setTimeout(pollData, 5000);
     }
   };
 
-  pollData(); // Initiate the first polling attempt
+  pollData();
 };
-
   return (
     <Box sx={{ backgroundColor: '#0D1B2A', color: '#fff', minHeight: '100vh' }}>
       <Container maxWidth="lg" sx={{ py: 2 }}>
