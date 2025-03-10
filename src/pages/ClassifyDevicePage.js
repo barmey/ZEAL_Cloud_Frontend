@@ -672,6 +672,7 @@ else:
                   jsonData.vendor_classification.label &&
                   jsonData.function_classification.label && (
                     <Box>
+                
                       <Typography variant="h6" gutterBottom>
                         Labeling Results:
                       </Typography>
@@ -679,7 +680,7 @@ else:
                         vendorClassification={jsonData.vendor_classification}
                         functionClassification={jsonData.function_classification}
                       />
-                      {/* Add JustificationCard */}
+                      {/* Add JustificationCard if available */}
                       {jsonData.function_classification.justification && (
                         <JustificationCard
                           justification={jsonData.function_classification.justification}
@@ -687,7 +688,6 @@ else:
                       )}
                     </Box>
                   )}
-
                 {/* Display output_url elegantly */}
                 {outputUrl && (
                   <Alert
