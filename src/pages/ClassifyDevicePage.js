@@ -338,23 +338,6 @@ const ClassifyDevicePage = () => {
             </Typography>
           </Grid>
         </Grid>
-      {/* New Section: Display Device Category if available */}
-      {jsonData.mock_data && (
-        <Box
-          sx={{
-            mb: 2,
-            p: 2,
-            backgroundColor: '#1B263B',
-            borderRadius: 2,
-            textAlign: 'center'
-          }}
-        >
-          <Typography variant="h6" color="secondary">
-            Device Category: {jsonData.mock_data}
-          </Typography>
-        </Box>
-      )}
-
         {/* Form and Results */}
         <Box sx={{ mt: 2 }}>
           {status === 'error' && errorMessage && (
@@ -672,6 +655,22 @@ else:
                   jsonData.vendor_classification.label &&
                   jsonData.function_classification.label && (
                     <Box>
+                      {/* New Device Category Section inside the Results */}
+                      {jsonData.mock_data && (
+                        <Box
+                          sx={{
+                            mb: 2,
+                            p: 2,
+                            backgroundColor: '#1B263B',
+                            borderRadius: 2,
+                            textAlign: 'center'
+                          }}
+                        >
+                          <Typography variant="h6" color="secondary">
+                            Device Category: {jsonData.mock_data}
+                          </Typography>
+                        </Box>
+                      )}
                 
                       <Typography variant="h6" gutterBottom>
                         Labeling Results:
@@ -687,7 +686,7 @@ else:
                         />
                       )}
                     </Box>
-                  )}
+                )}
                 {/* Display output_url elegantly */}
                 {outputUrl && (
                   <Alert
