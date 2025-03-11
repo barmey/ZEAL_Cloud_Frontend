@@ -5,8 +5,8 @@ import PropTypes from 'prop-types';
 import { Card, CardContent, Avatar, Typography, Stack, Box } from '@mui/material';
 
 const VendorCard = ({ vendorClassification, functionClassification }) => {
-  const vendorLabel = (vendorClassification.label || "").toLowerCase();
-  const functionLabel = (functionClassification.label || "").toLowerCase();
+  const vendorLabel = (vendorClassification?.label || "").toLowerCase();
+  const functionLabel = (functionClassification?.label || "").toLowerCase();
 
   // Determine the source URL for vendor icon based on classification label
   const avatarSrc = `https://img.logo.dev/${label}.com?token=pk_MJLPtkW9ToSWXPNdIBNy6w`;
