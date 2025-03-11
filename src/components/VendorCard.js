@@ -1,5 +1,3 @@
-// src/components/VendorCard.js
-
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardContent, Avatar, Typography, Stack, Box } from '@mui/material';
@@ -8,15 +6,13 @@ const VendorCard = ({ vendorClassification, functionClassification }) => {
   const vendorLabel = (vendorClassification?.label || "").toLowerCase();
   const functionLabel = (functionClassification?.label || "").toLowerCase();
 
-  // Determine the source URL for vendor icon based on classification label
-  const avatarSrc = `https://img.logo.dev/${label}.com?token=pk_MJLPtkW9ToSWXPNdIBNy6w`;
+  // Use vendorLabel instead of undefined "label"
+  const avatarSrc = `https://img.logo.dev/${vendorLabel}.com?token=pk_MJLPtkW9ToSWXPNdIBNy6w`;
 
-  // Set a specific default image for "unknown" function
   const functionIconSrc = functionLabel === "unknown"
     ? '/path/to/unknown_function_icon.png' // Replace with your "unknown" function icon path
     : `https://img.logo.dev/${functionLabel}.com?token=pk_MJLPtkW9ToSWXPNdIBNy6w`;
 
-  // State to handle fallback images if the primary sources fail to load
   const [imgSrc, setImgSrc] = useState(avatarSrc);
   const [functionIcon, setFunctionIcon] = useState(functionIconSrc);
 
