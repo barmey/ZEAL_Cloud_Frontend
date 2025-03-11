@@ -306,13 +306,15 @@ const ClassifyDevicePage = () => {
         if (!mergedData.mock_data && initialMockData) {
           mergedData.mock_data = initialMockData;
         }
+        // Always set status to success when data is available
+        setStatus('success');
         setJsonData(mergedData);
-        if (mergedData.final) {
-          setStatus('success');
+        // Continue polling if final flag is not set
+        if (!mergedData.final) {
+          setTimeout(pollData, 5000);
+        } else {
           setIsPolling(false);
           setPollingMessage('Results fetched successfully!');
-        } else {
-          setTimeout(pollData, 5000);
         }
       } else {
         setTimeout(pollData, 5000);
