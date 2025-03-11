@@ -673,16 +673,25 @@ else:
                     <Typography variant="h6" gutterBottom>
                       Labeling Results:
                     </Typography>
+                    
                     <VendorCard
                       vendorClassification={jsonData.vendor_classification || {}}
                       functionClassification={jsonData.function_classification || {}}
                     />
-                    {jsonData.function_classification &&
-                      jsonData.function_classification.justification && (
-                        <JustificationCard
-                          justification={jsonData.function_classification.justification}
-                        />
+                    {jsonData.function_classification.justification && (
+                      <JustificationCard
+                        justification={jsonData.function_classification.justification}
+                      />
                     )}
+                
+                    {/* Always show waiting message if final is not true */}
+                    {!jsonData.final && (
+                      <Alert severity="info" sx={{ mt: 2 }}>
+                        Waiting for classification to complete...
+                      </Alert>
+                    )}
+                  </Box>
+                )}
                 
                     {/* If final flag is not set, display a waiting message */}
                     {!jsonData.final && (
