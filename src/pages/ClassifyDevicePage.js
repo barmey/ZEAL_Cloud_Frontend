@@ -692,15 +692,6 @@ else:
                     )}
                   </Box>
                 )}
-                
-                    {/* If final flag is not set, display a waiting message */}
-                    {!jsonData.final && (
-                      <Alert severity="info" sx={{ mt: 2 }}>
-                        Waiting for classification to complete...
-                      </Alert>
-                    )}
-                  </Box>
-                )}
                 {/* Display output_url elegantly */}
                 {outputUrl && (
                   <Alert
