@@ -680,7 +680,8 @@ else:
                       vendorClassification={jsonData.vendor_classification || {}}
                       functionClassification={jsonData.function_classification || {}}
                     />
-                    {jsonData.function_classification.justification && (
+                    
+                    {jsonData.function_classification?.justification && (
                       <JustificationCard
                         justification={jsonData.function_classification.justification}
                       />
