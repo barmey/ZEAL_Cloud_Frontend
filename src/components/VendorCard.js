@@ -1,27 +1,44 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardContent, Avatar, Typography, Stack, Box } from '@mui/material';
 
 const VendorCard = ({ vendorClassification, functionClassification }) => {
+  // Normalize the labels to lower case (or empty string if not provided)
   const vendorLabel = (vendorClassification?.label || "").toLowerCase();
   const functionLabel = (functionClassification?.label || "").toLowerCase();
 
-  // Use vendorLabel instead of undefined "label"
-  const avatarSrc = `https://img.logo.dev/${vendorLabel}.com?token=pk_MJLPtkW9ToSWXPNdIBNy6w`;
+  // Default fallback images
+  const defaultVendorIcon = '/path/to/default/avatar.png';
+  const defaultFunctionIcon = '/path/to/default/function_icon.png';
 
-  const functionIconSrc = functionLabel === "unknown"
-    ? '/path/to/unknown_function_icon.png' // Replace with your "unknown" function icon path
-    : `https://img.logo.dev/${functionLabel}.com?token=pk_MJLPtkW9ToSWXPNdIBNy6w`;
+  // State for icon URLs
+  const [imgSrc, setImgSrc] = useState(defaultVendorIcon);
+  const [functionIcon, setFunctionIcon] = useState(defaultFunctionIcon);
 
-  const [imgSrc, setImgSrc] = useState(avatarSrc);
-  const [functionIcon, setFunctionIcon] = useState(functionIconSrc);
+  // Update the vendor icon URL when vendorLabel changes
+  useEffect(() => {
+    if (vendorLabel) {
+      setImgSrc(`https://img.logo.dev/${vendorLabel}.com?token=pk_MJLPtkW9ToSWXPNdIBNy6w`);
+    } else {
+      setImgSrc(defaultVendorIcon);
+    }
+  }, [vendorLabel]);
+
+  // Update the function icon URL when functionLabel changes
+  useEffect(() => {
+    if (functionLabel && functionLabel !== "unknown") {
+      setFunctionIcon(`https://img.logo.dev/${functionLabel}.com?token=pk_MJLPtkW9ToSWXPNdIBNy6w`);
+    } else {
+      setFunctionIcon(defaultFunctionIcon);
+    }
+  }, [functionLabel]);
 
   const handleImageError = () => {
-    setImgSrc('/path/to/default/avatar.png'); // Replace with your fallback vendor image path
+    setImgSrc(defaultVendorIcon);
   };
 
   const handleFunctionIconError = () => {
-    setFunctionIcon('/path/to/default/function_icon.png'); // Replace with your fallback function icon path
+    setFunctionIcon(defaultFunctionIcon);
   };
 
   return (
