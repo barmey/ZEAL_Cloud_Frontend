@@ -651,41 +651,46 @@ else:
                 )}
 
                 {/* Display fetched Vendor and Function Classification */}
-                {status === 'success' &&
-                  jsonData.vendor_classification.label &&
-                  jsonData.function_classification.label && (
-                    <Box>
-                      {/* New Device Category Section inside the Results */}
-                      {jsonData.mock_data && (
-                        <Box
-                          sx={{
-                            mb: 2,
-                            p: 2,
-                            backgroundColor: '#1B263B',
-                            borderRadius: 2,
-                            textAlign: 'center'
-                          }}
-                        >
-                          <Typography variant="h6" color="secondary">
-                            Device Category: {jsonData.mock_data}
-                          </Typography>
-                        </Box>
-                      )}
+                {status === 'success' && (
+                  <Box>
+                    {/* Device Category Section inside Results */}
+                    {jsonData.mock_data && (
+                      <Box
+                        sx={{
+                          mb: 2,
+                          p: 2,
+                          backgroundColor: '#1B263B',
+                          borderRadius: 2,
+                          textAlign: 'center'
+                        }}
+                      >
+                        <Typography variant="h6" color="secondary">
+                          Device Category: {jsonData.mock_data}
+                        </Typography>
+                      </Box>
+                    )}
                 
-                      <Typography variant="h6" gutterBottom>
-                        Labeling Results:
-                      </Typography>
-                      <VendorCard
-                        vendorClassification={jsonData.vendor_classification}
-                        functionClassification={jsonData.function_classification}
-                      />
-                      {/* Add JustificationCard if available */}
-                      {jsonData.function_classification.justification && (
+                    <Typography variant="h6" gutterBottom>
+                      Labeling Results:
+                    </Typography>
+                    <VendorCard
+                      vendorClassification={jsonData.vendor_classification || {}}
+                      functionClassification={jsonData.function_classification || {}}
+                    />
+                    {jsonData.function_classification &&
+                      jsonData.function_classification.justification && (
                         <JustificationCard
                           justification={jsonData.function_classification.justification}
                         />
-                      )}
-                    </Box>
+                    )}
+                
+                    {/* If final flag is not set, display a waiting message */}
+                    {!jsonData.final && (
+                      <Alert severity="info" sx={{ mt: 2 }}>
+                        Waiting for classification to complete...
+                      </Alert>
+                    )}
+                  </Box>
                 )}
                 {/* Display output_url elegantly */}
                 {outputUrl && (
