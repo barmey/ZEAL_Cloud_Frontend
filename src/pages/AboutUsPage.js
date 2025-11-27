@@ -30,17 +30,44 @@ const AboutUsPage = () => {
   const [formStatus, setFormStatus] = useState(null);
 
   const [isZoomed, setIsZoomed] = useState(false); // State for image zoom
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
   const handleFormChange = (e) => {
     const { name, value } = e.target;
     setDemoFormData({ ...demoFormData, [name]: value });
   };
 
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    // Since we're not sending the data anywhere, we can simply reset the form or display a message
+  const handleFormSubmit = async (e) => {
+  e.preventDefault();
+
+  const FORM_ENDPOINT = 'https://formspree.io/f/mjkqrwlb';
+
+  setIsSubmitting(true);
+  setSubmitError('');
+  setFormStatus(null);
+
+  try {
+    const response = await fetch(FORM_ENDPOINT, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: JSON.stringify({
+        firstName: demoFormData.firstName,
+        lastName: demoFormData.lastName,
+        email: demoFormData.email,
+        company: demoFormData.company,
+        role: demoFormData.role,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    // Optional: you can inspect response.json() if you want
     setFormStatus('success');
-    // Reset the form
     setDemoFormData({
       firstName: '',
       lastName: '',
@@ -48,8 +75,16 @@ const AboutUsPage = () => {
       company: '',
       role: '',
     });
-  };
-
+  } catch (err) {
+    console.error('Error submitting contact form:', err);
+    setSubmitError(
+      'Something went wrong sending your request. Please try again or email us at deepnesslab@tauex.tau.ac.il.'
+    );
+    setFormStatus('error');
+  } finally {
+    setIsSubmitting(false);
+  }
+};
   const location = useLocation(); // Get the current location
   const contactFormRef = useRef(null); // Reference to the contact form
   const [highlight, setHighlight] = useState(false); // State to manage highlight
