@@ -376,7 +376,7 @@ const AboutUsPage = () => {
               <Box sx={{ display: 'flex', gap: 2 }}>
                 <IconButton
                   component="a"
-                  href="https://github.com/barmey/NSDI_Labeling_system"
+                  href="https://github.com/x/NSDI_Labeling_system"
                   target="_blank"
                   rel="noopener"
                   sx={{ color: '#fff' }}
