@@ -361,7 +361,7 @@ const AboutUsPage = () => {
                   textIndent: '2em',
                 }}
               >
-                Developed by the research group <strong>Deepness Lab</strong>, ZEAL
+                Developed by the research group, ZEAL
                 provides a cutting-edge labeling system for unseen IoT devices. Our
                 mission is to offer unparalleled visibility into network-connected
                 devices, revealing both vendor and function to enhance security and
@@ -385,7 +385,7 @@ const AboutUsPage = () => {
                 </IconButton>
                 <IconButton
                   component="a"
-                  href="http://linkedin.com/in/meyuhas/"
+                  href="http://linkedin.com/in/"
                   target="_blank"
                   rel="noopener"
                   sx={{ color: '#fff' }}
@@ -394,7 +394,7 @@ const AboutUsPage = () => {
                 </IconButton>
                 <IconButton
                   component="a"
-                  href="https://scholar.google.com/citations?user=xeWZouIAAAAJ&hl=en"
+                  href="https://scholar.google.com/"
                   target="_blank"
                   rel="noopener"
                   sx={{ color: '#fff' }}
@@ -406,7 +406,7 @@ const AboutUsPage = () => {
           </Grid>
           <Box sx={{ mt: 2, textAlign: 'center' }}>
             <Typography variant="body2" sx={{ color: '#E0E1DD' }}>
-              © {new Date().getFullYear()} Anat Bremler-Barr, Bar Meyuhas, and Tal Shapira - All Rights Reserved
+              © {new Date().getFullYear()} - All Rights Reserved
             </Typography>
           </Box>
         </Container>
