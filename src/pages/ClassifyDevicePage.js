@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {
   Box,
   Button,
-  Card,
   TextField,
   Typography,
   Alert,
@@ -30,6 +29,14 @@ import { v4 as uuidv4 } from 'uuid';
 import Lottie from 'react-lottie';
 import scanningAnimationData from '../animations/scanning.json';
 import { useNavigate } from 'react-router-dom';
+import { zeal } from '../theme';
+
+const glassCard = {
+  background: zeal.surface,
+  border: `1px solid ${zeal.border}`,
+  backdropFilter: 'blur(16px)',
+  borderRadius: 4,
+};
 
 const ClassifyDevicePage = () => {
   const [formData, setFormData] = useState({
@@ -362,191 +369,247 @@ const ClassifyDevicePage = () => {
   };
 
   return (
-    <Box sx={{ backgroundColor: '#0D1B2A', color: '#fff', minHeight: '100vh' }}>
-      <Container maxWidth="lg" sx={{ py: 2 }}>
-        <Grid container spacing={2} alignItems="center">
-          <Grid item xs={12}>
-            <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold' }}>
-              IoT Device Labeling System
-            </Typography>
-            <Typography variant="body1" sx={{ mb: 2 }}>
-              Our system provides detection of devices, giving you insights into your network. Try it out:
-            </Typography>
-          </Grid>
-        </Grid>
-        <Box sx={{ mt: 2 }}>
-          {status === 'error' && errorMessage && (
-            <Alert severity="error" sx={{ mb: 2 }}>
-              {errorMessage}
-            </Alert>
-          )}
-          <Card sx={{ p: 2, borderRadius: 2, boxShadow: 3, backgroundColor: '#1B263B', color: '#fff' }}>
-            <Grid container spacing={2}>
-              {/* Form Section */}
-              <Grid item xs={12} md={6}>
-                <form onSubmit={handleSubmit}>
-                  <Stack spacing={2}>
-                    <TextField
-                      label="API Key"
-                      name="apiKey"
-                      type="password"
-                      value={formData.apiKey}
-                      onChange={handleChange}
-                      required
-                      fullWidth
-                      variant="outlined"
-                      InputProps={{
-                        startAdornment: <VpnKeyIcon sx={{ mr: 1 }} />,
-                        style: { color: '#fff' },
+    <Box sx={{ backgroundColor: zeal.bg, color: zeal.text, minHeight: '100vh', position: 'relative', overflow: 'hidden' }}>
+      {/* ambient glow */}
+      <Box
+        sx={{
+          position: 'absolute',
+          top: -160,
+          right: -160,
+          width: 460,
+          height: 460,
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(37,99,235,0.22) 0%, transparent 65%)',
+          pointerEvents: 'none',
+        }}
+      />
+      <Container maxWidth="lg" sx={{ py: { xs: 4, md: 6 }, position: 'relative' }}>
+        <Box sx={{ mb: 4 }}>
+          <Typography
+            sx={{
+              color: zeal.cyan,
+              fontWeight: 600,
+              letterSpacing: '0.25em',
+              textTransform: 'uppercase',
+              fontSize: '0.75rem',
+              mb: 1,
+            }}
+          >
+            Live Classification
+          </Typography>
+          <Typography
+            variant="h3"
+            sx={{
+              fontSize: { xs: '1.9rem', md: '2.6rem' },
+              mb: 1.5,
+              background: zeal.gradientText,
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              color: 'transparent',
+            }}
+          >
+            IoT Device Labeling System
+          </Typography>
+          <Typography variant="body1" sx={{ color: zeal.textDim, maxWidth: 640 }}>
+            Our system provides detection of devices, giving you insights into your network. Try it out:
+          </Typography>
+        </Box>
+
+        {status === 'error' && errorMessage && (
+          <Alert severity="error" sx={{ mb: 3 }}>
+            {errorMessage}
+          </Alert>
+        )}
+
+        <Box sx={{ ...glassCard, p: { xs: 2.5, md: 4 } }}>
+          <Grid container spacing={4}>
+            {/* Form Section */}
+            <Grid item xs={12} md={6}>
+              <form onSubmit={handleSubmit}>
+                <Stack spacing={2.5}>
+                  <TextField
+                    label="API Key"
+                    name="apiKey"
+                    type="password"
+                    value={formData.apiKey}
+                    onChange={handleChange}
+                    required
+                    fullWidth
+                    variant="outlined"
+                    InputProps={{
+                      startAdornment: <VpnKeyIcon sx={{ mr: 1, color: zeal.blueLight }} />,
+                    }}
+                    helperText="To get an API key, please send an email to deepnesslab@tauex.tau.ac.il or click on 'API / Access Request' above."
+                  />
+                  <FormControl component="fieldset">
+                    <Typography variant="subtitle1" sx={{ display: 'flex', alignItems: 'center', mb: 0.5 }}>
+                      <InputIcon sx={{ mr: 1, color: zeal.blueLight }} /> Choose Input Method:
+                    </Typography>
+                    <RadioGroup
+                      row
+                      value={inputMethod}
+                      onChange={handleInputMethodChange}
+                      sx={{
+                        gap: 1,
+                        '& .MuiFormControlLabel-root': {
+                          m: 0,
+                          px: 1.5,
+                          py: 0.25,
+                          borderRadius: 2,
+                          border: `1px solid ${zeal.border}`,
+                          transition: 'border-color 0.2s, background 0.2s',
+                        },
+                        '& .MuiFormControlLabel-root:has(.Mui-checked)': {
+                          borderColor: zeal.cyan,
+                          background: 'rgba(56, 189, 248, 0.08)',
+                        },
                       }}
-                      helperText="To get an API key, please send an email to deepnesslab@tauex.tau.ac.il or click on 'Get Access' above."
-                      sx={{ input: { color: '#fff' } }}
-                    />
-                    <FormControl component="fieldset">
-                      <Typography variant="subtitle1" sx={{ display: 'flex', alignItems: 'center' }}>
-                        <InputIcon sx={{ mr: 1 }} /> Choose Input Method:
+                    >
+                      <FormControlLabel value="inference_api" control={<Radio size="small" />} label="API Inference" />
+                      <FormControlLabel value="inference_json" control={<Radio size="small" />} label="JSON Inference" />
+                      <FormControlLabel value="api_usage" control={<Radio size="small" />} label="API FAQ" />
+                    </RadioGroup>
+                  </FormControl>
+                  {inputMethod === 'inference_api' && (
+                    <Box>
+                      <Typography variant="subtitle1" sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
+                        <DeviceHubIcon sx={{ mr: 1, color: zeal.blueLight }} />
+                        Device Information:
                       </Typography>
-                      <RadioGroup row value={inputMethod} onChange={handleInputMethodChange} sx={{ color: '#fff' }}>
-                        <FormControlLabel value="inference_api" control={<Radio />} label="API Inference" />
-                        <FormControlLabel value="inference_json" control={<Radio />} label="JSON Inference" />
-                        <FormControlLabel value="api_usage" control={<Radio />} label="API FAQ" />
-                      </RadioGroup>
-                    </FormControl>
-                    {inputMethod === 'inference_api' && (
-                      <Box>
-                        <Typography variant="subtitle1" sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                          <DeviceHubIcon sx={{ mr: 1 }} />
-                          Device Information:
-                        </Typography>
-                        <Grid container spacing={2}>
-                          <Grid item xs={12} sm={6}>
-                            <TextField
-                              label="MAC Address"
-                              name="mac_address"
-                              value={manualInput['mac_address']}
-                              onChange={handleManualInputChange}
-                              helperText="Example: AA:BB:CC:DD:EE:FF"
-                              fullWidth
-                              variant="outlined"
-                              InputProps={{ style: { color: '#fff' } }}
-                              sx={{ input: { color: '#fff' } }}
-                            />
-                          </Grid>
-                          <Grid item xs={12} sm={6}>
-                            <TextField
-                              label="HTTP User Agent"
-                              name="http.user_agent"
-                              value={manualInput['http.user_agent']}
-                              onChange={handleManualInputChange}
-                              helperText="Example: Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
-                              fullWidth
-                              variant="outlined"
-                              InputProps={{ style: { color: '#fff' } }}
-                              sx={{ input: { color: '#fff' } }}
-                            />
-                          </Grid>
-                          <Grid item xs={12} sm={6}>
-                            <TextField
-                              label="DHCP Hostname (comma-separated)"
-                              name="dhcp.option.hostname"
-                              value={manualInput['dhcp.option.hostname']}
-                              onChange={handleManualInputChange}
-                              helperText="Example: host1, host2"
-                              fullWidth
-                              variant="outlined"
-                              InputProps={{ style: { color: '#fff' } }}
-                              sx={{ input: { color: '#fff' } }}
-                            />
-                          </Grid>
-                          <Grid item xs={12} sm={6}>
-                            <TextField
-                              label="Domains (comma-separated)"
-                              name="dns.qry.name"
-                              value={manualInput['dns.qry.name']}
-                              onChange={handleManualInputChange}
-                              helperText="Example: example.com, test.com"
-                              fullWidth
-                              variant="outlined"
-                              InputProps={{ style: { color: '#fff' } }}
-                              sx={{ input: { color: '#fff' } }}
-                            />
-                          </Grid>
-                          <Grid item xs={12} sm={6}>
-                            <TextField
-                              label="DNS PTR (comma-separated)"
-                              name="dns.ptr.domain_name"
-                              value={manualInput['dns.ptr.domain_name']}
-                              onChange={handleManualInputChange}
-                              helperText="Example: ptr.example.com"
-                              fullWidth
-                              variant="outlined"
-                              InputProps={{ style: { color: '#fff' } }}
-                              sx={{ input: { color: '#fff' } }}
-                            />
-                          </Grid>
-                          <Grid item xs={12} sm={6}>
-                            <TextField
-                              label="Vendor Class ID (comma-separated)"
-                              name="dhcp.option.vendor_class_id"
-                              value={manualInput['dhcp.option.vendor_class_id']}
-                              onChange={handleManualInputChange}
-                              helperText="Example: MSFT 5.0, MSFT 5.1"
-                              fullWidth
-                              variant="outlined"
-                              InputProps={{ style: { color: '#fff' } }}
-                              sx={{ input: { color: '#fff' } }}
-                            />
-                          </Grid>
+                      <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6}>
+                          <TextField
+                            label="MAC Address"
+                            name="mac_address"
+                            value={manualInput['mac_address']}
+                            onChange={handleManualInputChange}
+                            helperText="Example: AA:BB:CC:DD:EE:FF"
+                            fullWidth
+                            variant="outlined"
+                          />
                         </Grid>
-                      </Box>
-                    )}
-                    {inputMethod === 'inference_json' && (
-                      <>
-                        <Typography variant="subtitle1" sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                          <InputIcon sx={{ mr: 1 }} />
-                          Enter JSON Input:
-                        </Typography>
-                        <TextField
-                          label="JSON Input"
-                          name="jsonInput"
-                          value={formData.jsonInput}
-                          onChange={handleJsonInputChange}
-                          multiline
-                          rows={10}
-                          fullWidth
-                          variant="outlined"
-                          helperText="Modify the example JSON as needed."
-                          InputProps={{ style: { color: '#fff', fontFamily: 'monospace' } }}
-                          sx={{ textarea: { color: '#fff', fontFamily: 'monospace' } }}
-                        />
-                      </>
-                    )}
-                    {inputMethod === 'api_usage' && (
-                      <Box sx={{ mt: 2 }}>
-                        <Typography variant="h6" gutterBottom>
-                          API Usage Instructions
-                        </Typography>
-                        <Typography variant="body1" gutterBottom>
-                          You can use the API directly by making HTTP POST requests to the following endpoint:
-                        </Typography>
-                        <Typography variant="body2" sx={{ mb: 2 }}>
-                          <code>
-                            https://qxzcncmpw4.execute-api.eu-west-2.amazonaws.com/bar_test_stage/classify
-                          </code>
-                        </Typography>
-                        <Typography variant="body1" gutterBottom>
-                          Below is a Python code example using the <code>requests</code> library:
-                        </Typography>
-                        <pre
-                          style={{
-                            backgroundColor: '#415A77',
-                            padding: '10px',
-                            borderRadius: '8px',
-                            overflowX: 'auto',
-                            color: '#E0E1DD',
-                          }}
-                        >
-                          {`import requests
+                        <Grid item xs={12} sm={6}>
+                          <TextField
+                            label="HTTP User Agent"
+                            name="http.user_agent"
+                            value={manualInput['http.user_agent']}
+                            onChange={handleManualInputChange}
+                            helperText="Example: Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+                            fullWidth
+                            variant="outlined"
+                          />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                          <TextField
+                            label="DHCP Hostname (comma-separated)"
+                            name="dhcp.option.hostname"
+                            value={manualInput['dhcp.option.hostname']}
+                            onChange={handleManualInputChange}
+                            helperText="Example: host1, host2"
+                            fullWidth
+                            variant="outlined"
+                          />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                          <TextField
+                            label="Domains (comma-separated)"
+                            name="dns.qry.name"
+                            value={manualInput['dns.qry.name']}
+                            onChange={handleManualInputChange}
+                            helperText="Example: example.com, test.com"
+                            fullWidth
+                            variant="outlined"
+                          />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                          <TextField
+                            label="DNS PTR (comma-separated)"
+                            name="dns.ptr.domain_name"
+                            value={manualInput['dns.ptr.domain_name']}
+                            onChange={handleManualInputChange}
+                            helperText="Example: ptr.example.com"
+                            fullWidth
+                            variant="outlined"
+                          />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                          <TextField
+                            label="Vendor Class ID (comma-separated)"
+                            name="dhcp.option.vendor_class_id"
+                            value={manualInput['dhcp.option.vendor_class_id']}
+                            onChange={handleManualInputChange}
+                            helperText="Example: MSFT 5.0, MSFT 5.1"
+                            fullWidth
+                            variant="outlined"
+                          />
+                        </Grid>
+                      </Grid>
+                    </Box>
+                  )}
+                  {inputMethod === 'inference_json' && (
+                    <>
+                      <Typography variant="subtitle1" sx={{ display: 'flex', alignItems: 'center', mb: 0.5 }}>
+                        <InputIcon sx={{ mr: 1, color: zeal.blueLight }} />
+                        Enter JSON Input:
+                      </Typography>
+                      <TextField
+                        label="JSON Input"
+                        name="jsonInput"
+                        value={formData.jsonInput}
+                        onChange={handleJsonInputChange}
+                        multiline
+                        rows={10}
+                        fullWidth
+                        variant="outlined"
+                        helperText="Modify the example JSON as needed."
+                        sx={{
+                          textarea: {
+                            fontFamily: '"JetBrains Mono", monospace',
+                            fontSize: '0.85rem',
+                          },
+                        }}
+                      />
+                    </>
+                  )}
+                  {inputMethod === 'api_usage' && (
+                    <Box sx={{ mt: 1 }}>
+                      <Typography variant="h6" gutterBottom>
+                        API Usage Instructions
+                      </Typography>
+                      <Typography variant="body1" gutterBottom sx={{ color: zeal.textDim }}>
+                        You can use the API directly by making HTTP POST requests to the following endpoint:
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          mb: 2,
+                          p: 1.5,
+                          borderRadius: 2,
+                          background: 'rgba(4, 9, 18, 0.8)',
+                          border: `1px solid ${zeal.border}`,
+                          overflowX: 'auto',
+                        }}
+                      >
+                        <code>
+                          https://qxzcncmpw4.execute-api.eu-west-2.amazonaws.com/bar_test_stage/classify
+                        </code>
+                      </Typography>
+                      <Typography variant="body1" gutterBottom sx={{ color: zeal.textDim }}>
+                        Below is a Python code example using the <code>requests</code> library:
+                      </Typography>
+                      <pre
+                        style={{
+                          backgroundColor: 'rgba(4, 9, 18, 0.8)',
+                          border: `1px solid ${zeal.border}`,
+                          padding: '14px',
+                          borderRadius: '10px',
+                          overflowX: 'auto',
+                          color: '#a5c9f5',
+                          fontSize: '0.8rem',
+                          lineHeight: 1.6,
+                        }}
+                      >
+                        {`import requests
 import json
 
 url = "https://qxzcncmpw4.execute-api.eu-west-2.amazonaws.com/bar_test_stage/classify"
@@ -574,126 +637,157 @@ if response.ok:
     print("Response:", response.json())
 else:
     print("Error:", response.text)`}
-                        </pre>
-                      </Box>
-                    )}
-                    {inputMethod !== 'api_usage' && (
-                      <Button
-                        type="submit"
-                        variant="contained"
-                        size="large"
-                        fullWidth
-                        disabled={isPolling}
-                        startIcon={<DeviceHubIcon />}
-                        sx={{ backgroundColor: '#1B9AAA', '&:hover': { backgroundColor: '#128E9E' } }}
-                      >
-                        {isPolling ? 'Classifying...' : 'Classify'}
-                      </Button>
-                    )}
-                  </Stack>
-                </form>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                {isPolling && (
-                  <Box sx={{ mb: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <Lottie options={scanningAnimationOptions} height={200} width={200} />
-                    <Typography variant="h6">{pollingMessage}</Typography>
-                  </Box>
-                )}
-                {status === 'success' && (
-                  <Box>
-                    {jsonData.mock_data && (
-                      <Box
+                      </pre>
+                    </Box>
+                  )}
+                  {inputMethod !== 'api_usage' && (
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      color="primary"
+                      size="large"
+                      fullWidth
+                      disabled={isPolling}
+                      startIcon={<DeviceHubIcon />}
+                      sx={{ py: 1.5, fontSize: '1rem' }}
+                    >
+                      {isPolling ? 'Classifying...' : 'Classify'}
+                    </Button>
+                  )}
+                </Stack>
+              </form>
+            </Grid>
+
+            {/* Results Section */}
+            <Grid item xs={12} md={6}>
+              {isPolling && (
+                <Box sx={{ mb: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                  <Lottie options={scanningAnimationOptions} height={200} width={200} />
+                  <Typography variant="h6" sx={{ textAlign: 'center' }}>{pollingMessage}</Typography>
+                </Box>
+              )}
+              {status === 'success' && (
+                <Box>
+                  {jsonData.mock_data && (
+                    <Box
+                      sx={{
+                        mb: 2,
+                        p: 2,
+                        borderRadius: 3,
+                        background: 'rgba(56, 189, 248, 0.06)',
+                        border: `1px solid ${zeal.border}`,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexWrap: 'wrap',
+                      }}
+                    >
+                      <Typography variant="h6" sx={{ mr: 1, color: zeal.blueLight }}>
+                        Device Category: {jsonData.mock_data}
+                      </Typography>
+                      <IconButton
+                        onClick={() => {
+                          if (!feedback.deviceCategory) submitFeedbackForLabel('deviceCategory', 'Correct');
+                        }}
                         sx={{
-                          mb: 2,
-                          p: 2,
-                          backgroundColor: '#1B263B',
-                          borderRadius: 2,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center'
+                          color: feedback.deviceCategory === 'Correct'
+                            ? '#4caf50'
+                            : feedback.deviceCategory === 'Incorrect'
+                            ? '#9e9e9e'
+                            : '#4caf50',
                         }}
                       >
-                        <Typography variant="h6" color="secondary" sx={{ mr: 1 }}>
-                          Device Category: {jsonData.mock_data}
+                        <CheckIcon />
+                      </IconButton>
+                      <IconButton
+                        onClick={() => {
+                          if (!feedback.deviceCategory) submitFeedbackForLabel('deviceCategory', 'Incorrect');
+                        }}
+                        sx={{
+                          color: feedback.deviceCategory === 'Incorrect'
+                            ? '#f44336'
+                            : feedback.deviceCategory === 'Correct'
+                            ? '#9e9e9e'
+                            : '#f44336',
+                        }}
+                      >
+                        <CloseIcon />
+                      </IconButton>
+                      {deviceFeedbackMsg && (
+                        <Typography variant="caption" sx={{ ml: 1 }}>
+                          {deviceFeedbackMsg}
                         </Typography>
-                        <IconButton
-                          onClick={() => {
-                            if (!feedback.deviceCategory) submitFeedbackForLabel('deviceCategory', 'Correct');
-                          }}
-                          sx={{
-                            color: feedback.deviceCategory === 'Correct'
-                              ? '#4caf50'
-                              : feedback.deviceCategory === 'Incorrect'
-                              ? '#9e9e9e'
-                              : '#4caf50',
-                          }}
-                        >
-                          <CheckIcon />
-                        </IconButton>
-                        <IconButton
-                          onClick={() => {
-                            if (!feedback.deviceCategory) submitFeedbackForLabel('deviceCategory', 'Incorrect');
-                          }}
-                          sx={{
-                            color: feedback.deviceCategory === 'Incorrect'
-                              ? '#f44336'
-                              : feedback.deviceCategory === 'Correct'
-                              ? '#9e9e9e'
-                              : '#f44336',
-                          }}
-                        >
-                          <CloseIcon />
-                        </IconButton>
-                        {deviceFeedbackMsg && (
-                          <Typography variant="caption" sx={{ ml: 1 }}>
-                            {deviceFeedbackMsg}
-                          </Typography>
-                        )}
-                      </Box>
-                    )}
-                    <Typography variant="h6" gutterBottom>
-                      Labeling Results:
-                    </Typography>
-                    <VendorCard
-                      vendorClassification={jsonData.vendor_classification || {}}
-                      functionClassification={jsonData.function_classification || {}}
-                      vendorFeedback={feedback.vendor}
-                      onVendorFeedback={(value) => submitFeedbackForLabel('vendor', value)}
-                      functionFeedback={feedback.functionLabel}
-                      onFunctionFeedback={(value) => submitFeedbackForLabel('functionLabel', value)}
-                    />
-                    {!jsonData.final && (
-                      <Alert severity="info" sx={{ mt: 2 }}>
-                        Waiting for labeling to complete...
-                      </Alert>
-                    )}
+                      )}
+                    </Box>
+                  )}
+                  <Typography variant="h6" gutterBottom>
+                    Labeling Results:
+                  </Typography>
+                  <VendorCard
+                    vendorClassification={jsonData.vendor_classification || {}}
+                    functionClassification={jsonData.function_classification || {}}
+                    vendorFeedback={feedback.vendor}
+                    onVendorFeedback={(value) => submitFeedbackForLabel('vendor', value)}
+                    functionFeedback={feedback.functionLabel}
+                    onFunctionFeedback={(value) => submitFeedbackForLabel('functionLabel', value)}
+                  />
+                  {!jsonData.final && (
+                    <Alert severity="info" sx={{ mt: 2 }}>
+                      Waiting for labeling to complete...
+                    </Alert>
+                  )}
+                </Box>
+              )}
+              {outputUrl && (
+                <Alert severity="info" sx={{ mt: 2 }}>
+                  <Typography variant="subtitle1">
+                    When results are ready, you can view them here:
+                  </Typography>
+                  <Link href={outputUrl} target="_blank" rel="noopener" sx={{ color: zeal.cyan }}>
+                    View Results
+                  </Link>
+                </Alert>
+              )}
+              {!isPolling && status !== 'success' && !outputUrl && inputMethod !== 'api_usage' && (
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    height: '100%',
+                    minHeight: { xs: 220, md: 380 },
+                    borderRadius: 3,
+                    border: `1px dashed ${zeal.border}`,
+                    p: 4,
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: 96,
+                      height: 96,
+                      borderRadius: '50%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      background: 'rgba(56, 189, 248, 0.08)',
+                      border: `1px solid ${zeal.border}`,
+                      mb: 3,
+                      animation: 'pulseGlow 3s ease-in-out infinite',
+                    }}
+                  >
+                    <SearchIcon sx={{ fontSize: 48, color: zeal.cyan }} />
                   </Box>
-                )}
-                {outputUrl && (
-                  <Alert sx={{ mt: 2, backgroundColor: '#415A77', color: '#E0E1DD' }} severity="info">
-                    <Typography variant="subtitle1">
-                      When results are ready, you can view them here:
-                    </Typography>
-                    <Link href={outputUrl} target="_blank" rel="noopener" color="secondary">
-                      View Results
-                    </Link>
-                  </Alert>
-                )}
-                {!isPolling && status !== 'success' && !outputUrl && inputMethod !== 'api_usage' && (
-                  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 4 }}>
-                    <SearchIcon sx={{ fontSize: 80, color: '#1B9AAA', mt: 16 }} />
-                    <Typography variant="h6" sx={{ mt: 2, textAlign: 'center' }}>
-                      Ready to classify your IoT device?
-                    </Typography>
-                    <Typography variant="body1" sx={{ mt: 1, textAlign: 'center' }}>
-                      Enter the device information on the left and click "Classify" to get started.
-                    </Typography>
-                  </Box>
-                )}
-              </Grid>
+                  <Typography variant="h6" sx={{ textAlign: 'center' }}>
+                    Ready to classify your IoT device?
+                  </Typography>
+                  <Typography variant="body1" sx={{ mt: 1, textAlign: 'center', color: zeal.textDim }}>
+                    Enter the device information on the left and click "Classify" to get started.
+                  </Typography>
+                </Box>
+              )}
             </Grid>
-          </Card>
+          </Grid>
         </Box>
       </Container>
     </Box>

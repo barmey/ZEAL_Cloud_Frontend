@@ -1,7 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Card, CardContent, Avatar, Typography, Stack, Box, IconButton } from '@mui/material';
+import {
+  Card,
+  CardContent,
+  Avatar,
+  Typography,
+  Stack,
+  Box,
+  IconButton,
+  LinearProgress,
+} from '@mui/material';
 import { Check as CheckIcon, Close as CloseIcon } from '@mui/icons-material';
+import { zeal } from '../theme';
+
+const ConfidenceBar = ({ value }) => (
+  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 0.5 }}>
+    <LinearProgress
+      variant="determinate"
+      value={Math.max(0, Math.min(100, value))}
+      sx={{
+        flex: 1,
+        height: 6,
+        borderRadius: 3,
+        backgroundColor: 'rgba(59, 130, 246, 0.15)',
+        '& .MuiLinearProgress-bar': {
+          borderRadius: 3,
+          background: zeal.gradientBtn,
+        },
+      }}
+    />
+    <Typography variant="caption" sx={{ color: zeal.textDim, minWidth: 38 }}>
+      {value}%
+    </Typography>
+  </Box>
+);
 
 const VendorCard = ({
   vendorClassification,
@@ -65,105 +97,131 @@ const VendorCard = ({
   };
 
   return (
-    <Card sx={{ p: 2, mb: 2, backgroundColor: '#415A77', color: '#E0E1DD' }}>
+    <Card
+      sx={{
+        p: 2,
+        mb: 2,
+        borderRadius: 3,
+        boxShadow: '0 12px 32px rgba(2, 8, 20, 0.5)',
+      }}
+    >
+      {/* Vendor */}
       <Stack direction="row" spacing={2} alignItems="center">
         <Avatar
           src={imgSrc}
           alt={vendorClassification.label}
-          sx={{ width: 100, height: 80 }}
+          sx={{
+            width: 72,
+            height: 72,
+            backgroundColor: '#fff',
+            border: `2px solid ${zeal.border}`,
+            p: 0.5,
+          }}
           imgProps={{ onError: handleImageError }}
         />
-        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-          <Stack direction="row" spacing={1} alignItems="center">
-            <Typography variant="h6" sx={{ color: '#E0E1DD' }}>
-              {vendorClassification.label}
-            </Typography>
-            <Typography variant="body2" sx={{ color: '#E0E1DD' }}>
-              (Confidence: {Math.round(vendorClassification.confidence * 100)}%)
-            </Typography>
+        <Box sx={{ flex: 1, minWidth: 0 }}>
+          <Typography variant="overline" sx={{ color: zeal.cyan, lineHeight: 1.4 }}>
+            Vendor
+          </Typography>
+          <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
+            <Typography variant="h6">{vendorClassification.label}</Typography>
             {/* Render vendor feedback icons only if a vendor label exists */}
             {vendorClassification.label && (
               <>
                 <IconButton
+                  size="small"
                   onClick={() => handleVendorFeedback('Correct')}
                   sx={{
-                    color: vendorFeedback === 'Correct' ? '#4caf50' : '#4caf50',
+                    color: '#4caf50',
                     '&.Mui-disabled': { color: vendorFeedback === 'Correct' ? '#4caf50' : '#9e9e9e' },
                   }}
                   disabled={vendorFeedback !== ""}
                 >
-                  <CheckIcon />
+                  <CheckIcon fontSize="small" />
                 </IconButton>
                 <IconButton
+                  size="small"
                   onClick={() => handleVendorFeedback('Incorrect')}
                   sx={{
-                    color: vendorFeedback === 'Incorrect' ? '#f44336' : '#f44336',
+                    color: '#f44336',
                     '&.Mui-disabled': { color: vendorFeedback === 'Incorrect' ? '#f44336' : '#9e9e9e' },
                   }}
                   disabled={vendorFeedback !== ""}
                 >
-                  <CloseIcon />
+                  <CloseIcon fontSize="small" />
                 </IconButton>
               </>
             )}
             {localVendorMsg && (
-              <Typography variant="caption" sx={{ ml: 1 }}>
+              <Typography variant="caption" sx={{ color: zeal.textDim }}>
                 {localVendorMsg}
               </Typography>
             )}
           </Stack>
+          <ConfidenceBar value={Math.round(vendorClassification.confidence * 100) || 0} />
         </Box>
       </Stack>
-      <CardContent>
-        <Stack direction="row" spacing={2} alignItems="center">
+
+      {/* Function */}
+      <CardContent sx={{ px: 0, pb: '8px !important' }}>
+        <Stack direction="row" spacing={2} alignItems="flex-start">
           <Avatar
             src={functionIcon}
             alt={functionClassification.label}
-            sx={{ width: 50, height: 50 }}
+            sx={{
+              width: 52,
+              height: 52,
+              backgroundColor: '#fff',
+              border: `2px solid ${zeal.border}`,
+              p: 0.5,
+            }}
             imgProps={{ onError: handleFunctionIconError }}
           />
-          <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-            <Stack direction="row" spacing={1} alignItems="center">
-              <Typography variant="h6" sx={{ color: '#E0E1DD' }}>
-                {functionClassification.label}
-              </Typography>
-              <Typography variant="body2" sx={{ color: '#E0E1DD' }}>
-                (Confidence: {Math.round(functionClassification.confidence * 100)}%)
-              </Typography>
+          <Box sx={{ flex: 1, minWidth: 0 }}>
+            <Typography variant="overline" sx={{ color: zeal.cyan, lineHeight: 1.4 }}>
+              Function
+            </Typography>
+            <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
+              <Typography variant="h6">{functionClassification.label}</Typography>
               {/* Render function feedback icons only if function label exists */}
               {functionClassification.label && (
                 <>
                   <IconButton
+                    size="small"
                     onClick={() => handleFunctionFeedback('Correct')}
                     sx={{
-                      color: functionFeedback === 'Correct' ? '#4caf50' : '#4caf50',
+                      color: '#4caf50',
                       '&.Mui-disabled': { color: functionFeedback === 'Correct' ? '#4caf50' : '#9e9e9e' },
                     }}
                     disabled={functionFeedback !== ""}
                   >
-                    <CheckIcon />
+                    <CheckIcon fontSize="small" />
                   </IconButton>
                   <IconButton
+                    size="small"
                     onClick={() => handleFunctionFeedback('Incorrect')}
                     sx={{
-                      color: functionFeedback === 'Incorrect' ? '#f44336' : '#f44336',
+                      color: '#f44336',
                       '&.Mui-disabled': { color: functionFeedback === 'Incorrect' ? '#f44336' : '#9e9e9e' },
                     }}
                     disabled={functionFeedback !== ""}
                   >
-                    <CloseIcon />
+                    <CloseIcon fontSize="small" />
                   </IconButton>
                 </>
               )}
               {localFunctionMsg && (
-                <Typography variant="caption" sx={{ ml: 1 }}>
+                <Typography variant="caption" sx={{ color: zeal.textDim }}>
                   {localFunctionMsg}
                 </Typography>
               )}
             </Stack>
-            <Typography variant="body2" sx={{ color: '#E0E1DD' }}>
-              {functionClassification.justification}
-            </Typography>
+            <ConfidenceBar value={Math.round(functionClassification.confidence * 100) || 0} />
+            {functionClassification.justification && (
+              <Typography variant="body2" sx={{ color: zeal.textDim, mt: 1.5, lineHeight: 1.7 }}>
+                {functionClassification.justification}
+              </Typography>
+            )}
           </Box>
         </Stack>
       </CardContent>
